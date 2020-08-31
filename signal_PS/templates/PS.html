@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Подстанции{% endblock title %}
+{% block li2 %}<a class="active" href="/ps">Подстанции</a>{% endblock li2 %}
+
+
+
+{% block logic1 %}
+<style>
+span {
+    display: block;
+}
+
+.column {
+    float: left;
+    width: 15%;
+    padding: 15px;
+}
+.container {
+  position: absolute;
+    left: 30%;
+
+    width: 50%;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+      background-color: #f2f2f2;
+
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+     font-family: 'Roboto';
+
+}
+
+tr:hover {background-color:#f5f5f5;}
+
+
+</style>
+
+
+<h1 style="font-family:verdana;">
+    {{ namePS }}
+</h1>
+
+<div class="column">
+ {% if signals.count > 0 %}
+    <table >
+
+      <tr><th>Сигнал</th><th>Статус</th></tr>
+        {% for  signal in signals %}
+            <tr><th>{{ signal.type.type }} {{ signal.voltage.value }} {{ signal.name }} </th><th style="color:MediumSeaGreen;">{{ signal.status.status }}</th></tr>
+        {% endfor %}
+
+    </table>
+
+     <a id="para1" href="/ps">Обновить</a>
+    {% else %}
+        <h3 style="font-family:verdana;">
+        нет данных
+        </h3>
+ {% endif %}
+    </div>
+
+<div class="column">
+
+  <div class="container">
+       <h1 style="font-family:verdana;">
+    GSM Контроллер
+</h1>
+      <table >
+          {% if controllersGSM.count > 0 %}
+          {% for controllerGSM in controllersGSM %}
+                <tr><th>Серийный номер</th><th>{{ controllerGSM.serial_number }}</th></tr>
+                <tr><th>Тип контроллера </th><th>{{ controllerGSM.type.type }}</th></tr>
+                <tr><th>Номер тел </th><th> {{ controllerGSM.number_SIM.number }} {{ controllerGSM.number_SIM.provider.name }}</th></tr>
+                <tr><th>Примечание </th><th>{{ controllerGSM.add_description}}</th></tr>
+          {% endfor %}
+           {% else %}
+        <h3 style="font-family:verdana;">
+        нет данных
+        </h3>
+    {% endif %}
+      </table>
+
+
+</div>
+</div>
+{% endblock logic1 %}

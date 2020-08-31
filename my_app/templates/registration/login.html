@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}Аутенфикация{% endblock title %}
+{% block logic1 %}
+
+<style>
+{
+    box-sizing: border-box;
+
+}
+ img {
+    width:50%;
+  }
+.centr
+  {
+  position: absolute;
+    left: 30%;
+
+}
+
+input[type=text],input[type=password] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: left;
+
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+.container {
+  position: absolute;
+    left: 25%;
+    top: 25%;
+    width: 50%;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+.col-25 {
+    float: left;
+    width: 90%;
+    margin-top: 6px;
+}
+
+
+
+/* Clear floats after the columns */
+.row:after {
+
+    content: "";
+    display: table;
+    clear: both;
+
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .col-25, input[type=submit] {
+        width: 100%;
+        margin-top: 0;
+
+    }
+}
+</style>
+</style>
+
+
+
+<div class="container">
+  {% if next %}
+  {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+  {% else %}
+    <p>Please login to see this page.</p>
+  {% endif %}
+{% endif %}
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+
+
+
+  <div class="row">
+      <div class="col-25">
+        <td>{{ form.username.label_tag }}</td>
+        <td>{{ form.username }}</td>
+      </div>
+  </div>
+
+
+
+  <div class="row">
+      <div class="col-25">
+          <td>{{ form.password.label_tag }}</td>
+          <td>{{ form.password }}</td>
+         </div>
+  </div>
+
+ <div class="row">
+   <div class="col-25">
+<input type="submit" value="login" />
+<input type="hidden" name="next" value="{{ next }}" />
+     </div>
+ </div>
+  {% if form.errors %}
+  <p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+</form>
+</div>
+
+
+<div class="centr">
+<img src="/static/images/rosseti.jpg" />
+</div>
+{% endblock logic1 %}

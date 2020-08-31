@@ -1,0 +1,26 @@
+{% if messages.count > 0 %}
+    <h3>Список смс сообщений {{username}}</h3>
+<table id ="customers">
+        <tr><th>Id</th><th>Номер</th><th>ПС</th><th>Дата</th><th>Время</th><th>Текст СМС</th><th>Статус</th></tr>
+       {% for  message in messages %}
+        <tr>
+            <td >{{ message.id_SMS.id }}</td>
+            <td>{{ message.id_SMS.number }}</td>
+            <td>{{ message.id_SMS.ps.name }}</td>
+            <td>{{ message.id_SMS.date }}</td>
+            <td>{{ message.id_SMS.time }}{{time_zone}}</td>
+            <td>{{ message.id_SMS.text_sms }}</td>
+            <td>
+                {% if message.status_view %}
+                <img src="/static/admin/img/icon-yes.svg" alt="True">
+                {% else %}
+                <a id="para1" href="view_sms/{{message.id}}">ОК</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+
+    </table>
+{% else %}
+     <h3>Нет новых смс сообщений {{username}}</h3>
+    {% endif %}

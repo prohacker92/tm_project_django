@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+
+<head>
+    <title>{% block title %}Default title{% endblock title %}</title>
+
+   <link rel="stylesheet" href={% static "css/styles.css" %} />
+    <script type="text/javascript" src={% static "js/jquery.min.js" %}></script>
+    <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>-->
+</head>
+
+<body>
+    {% if user.is_authenticated %}
+        <ul>
+            <li>{% block li1 %}<a href="/">Главная</a>{% endblock li1 %}</li>
+            <li>{% block li2 %}<a href="/ps">Подстанции</a>{% endblock li2 %}</li>
+
+            <li>{% block li5 %}<a href="/archive">Архив</a>{% endblock li5 %}</li>
+            {% if perms.my_app.staff %}
+                <li>{% block li4 %}<a href="admin/" target="_blank">Админка</a>{% endblock li4 %}</li>
+            {% endif %}
+                <li style="float:right"><a  href="{% url 'logout'%}?next={{request.path}}">User: {{ user.get_username }} Logout</a></li>
+            {% else %}
+                <li style="float:right"><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+            {% endif %}
+             <li>{% block li3 %}<a href="/contacts">Контакты</a>{% endblock li3 %}</li>
+        </ul>
+
+  {% block logic1 %}{% endblock logic1 %}
+
+  {% block logic2 %}{% endblock logic2 %}
+</body>
+
+</html>

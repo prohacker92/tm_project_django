@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Подстанции{% endblock title %}
+{% block li2 %}<a class="active" href="/ps">Подстанции</a>{% endblock li2 %}
+
+
+
+{% block logic1 %}
+
+<style>
+    table {
+    border-collapse: collapse;
+    width: 100%;
+      background-color: #f2f2f2;
+
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+     font-family: 'Roboto';
+
+}
+
+tr:hover {background-color:#F0F8FF;}
+
+.container {
+  position: absolute;
+    left: 5%;
+
+    width: 30%;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+#para1 {
+    background-color: blue;
+    color: white;
+    padding:5px 30px;
+     margin: 5;
+    text-align: right;
+    text-decoration: none;
+    display: inline-block;
+}
+
+</style>
+<div class="container">
+     <table >
+
+      <tr><th>Подстанции</th><th>действие</th></tr>
+        {% for  ps in listPS %}
+            <tr><th>{{ ps.name }}  </th><th style="color:MediumSeaGreen;"><a id="para1" href="{{ps.name}}">выбрать</a></th></tr>
+        {% endfor %}
+
+    </table>
+</div>
+{% endblock logic1 %}

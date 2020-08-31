@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Контакты{% endblock title %}
+{% block li3 %}<a class="active" href="/contacts">Контакты</a>{% endblock li3 %}
+
+
+{% block logic1 %}
+<style>
+dl {
+    padding: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-right: 30px;
+    margin-left: 0px;
+    float:center;
+
+    font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+}
+
+dt{
+padding: 5px;
+}
+
+.container {
+  position: absolute;
+    left: 30%;
+    top: 15%;
+    width: 30%;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+</style>
+
+<div class="container">
+ <h3>Поддержка</h3>
+
+ <dl>
+   {% for  contact in contacts %}
+     <dt>{{contact.position }} {{contact.name }}</dt>
+     <dd>тел: {{contact.numbers}}</dd>
+     <dd>email: {{contact.email}}</dd>
+  {% endfor %}
+</dl>
+
+</div>
+
+{% endblock logic1 %}
+
+
+
+
+
