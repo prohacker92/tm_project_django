@@ -45,15 +45,8 @@ def run():
 
             worker.read_sms()
 
-            #if worker.sms_list:
-                #for message in worker.sms_list:
-                    #print("ecti!")
-                    #worker.send_sms(message=message.text)
-                    #worker.sms_list.clear()
-
             sleep(1)
-            #if worker.sms_status:
-                #print(worker.sms_status.status)
+
     finally:
         worker.modem_close()
 

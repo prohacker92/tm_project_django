@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+
 
 #python manage.py makemigrations
 #python manage.py migrate
@@ -8,13 +9,13 @@ from django.contrib.auth.models import User
 
 
 
-class Res(models.Model):
-    name = models.CharField(max_length=20, primary_key=True)
+#class Res(models.Model):
+#    name = models.CharField(max_length=20, primary_key=True)
 
 class Ps(models.Model):
     name = models.CharField(max_length=100, primary_key=True)
     tel_number = models.CharField(max_length=12)
-    res = models.ForeignKey(Res, on_delete=models.CASCADE)
+    res = models.ForeignKey(Group, on_delete=models.CASCADE)
 
 
 class Sms_message(models.Model):

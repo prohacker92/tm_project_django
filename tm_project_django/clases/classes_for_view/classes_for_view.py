@@ -4,24 +4,19 @@ from my_app.models import Sms_message, Viewed_messages, Ps
 
 
 
-def getUserPs (user_name):
-    ps = None
-    if user_name == "admin":
-        ps = Ps.objects.all()
+def getUserPs(username):
+    if username == "admin":
+        return Ps.objects.all()
 
-    elif user_name == "ODS":
-        ps = Ps.objects.all().exclude(name="ТЕСТ ПС1").exclude(name="не зарегистрирован")
+    elif username == "ODS":
+        return Ps.objects.all().exclude(name="ТЕСТ ПС1").exclude(name="не зарегистрирован")
     else:
-        for g in Group.objects.all():
-            for u in User.objects.filter(groups__name=g.name):
-                if user_name == u.username:
-                    print(g.name)
-                    ps = Ps.objects.filter(res=g.name)
-
-    return ps
+        group = Group.objects.get(user__username=username)
+        return Ps.objects.filter(res=group)
 
 
 def getUserMessages(user_name):
+    #переписать. оптимизировать запрос
     messages = None
     if user_name == "admin":
         messages = Sms_message.objects.all()

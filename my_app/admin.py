@@ -1,12 +1,12 @@
 from django.contrib import admin
 
 # Register your models here.
-from my_app.models import Sms_message, Res, Ps, Viewed_messages, Profile
+from my_app.models import Sms_message, Ps, Viewed_messages, Profile
 
 
-@admin.register(Res)
-class ResAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+#@admin.register(Res)
+#class ResAdmin(admin.ModelAdmin):
+#    list_display = ("name",)
 
 @admin.register(Ps)
 class PsAdmin(admin.ModelAdmin):
