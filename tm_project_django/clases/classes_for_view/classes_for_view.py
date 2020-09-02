@@ -35,27 +35,7 @@ def getUserMessages(user_name):
 
 
 class ToolForView:
-    """
-    def check_view(self, user_name, SHOW_VIEWED_CONTENT):
-        # переименовать переменные!!!
-        messages = getUserMessages(user_name)
 
-        a = []
-        b = []
-        c = []
-        user = User.objects.get(username=user_name)
-        viewed_messages = Viewed_messages.objects.filter(user=user)
-        for viw in viewed_messages:
-            a.append(viw.id_SMS.id)
-        for message in messages:
-            if message.id not in a:
-                b.append(message)
-            else:
-                if SHOW_VIEWED_CONTENT == "true":
-                    c.append(message)
-
-        return b, c
-"""
     def check_view(self, user_name, SHOW_VIEWED_CONTENT):
 
         #v_messages = Viewed_messages.objects.filter(user__username=user_name)
@@ -67,10 +47,38 @@ class ToolForView:
             print(SHOW_VIEWED_CONTENT)
             print(Viewed_messages.objects.filter(user__username=user_name, status_view=False))
             return Viewed_messages.objects.filter(user__username=user_name, status_view=False)
-        #return v_messages
 
-        #user = User.objects.get(username=user_name)
-        #viewed_messages = Viewed_messages.objects.filter(user=user)
+def filter_ps(number):
+    try:
+        return Ps.objects.get(tel_number=number)
+    except Ps.DoesNotExist:
+        return Ps.objects.get(tel_number="111")
 
 
-        #return
+def users_in_res(number, notification):
+    ps = filter_ps(number)
+    res = ps.res.name
+    users = User.objects.filter(groups__name = res).select_related('profile')
+    return users.filter(profile__notification=notification)
+
+class View_tables():
+
+    def __init__(self, tel_number_ps, sms_id):
+        self.number = tel_number_ps
+        self.sms_id = sms_id
+
+    def __create_view_table_for_user(self, user):
+        viw_sms_db = Viewed_messages()
+        viw_sms_db.user = User.objects.get(id=user.id)
+        viw_sms_db.id_SMS = Sms_message.objects.get(id=self.sms_id)
+        viw_sms_db.status_view = False
+        viw_sms_db.save()
+
+
+    def create_view_tables(self):
+
+        #self.__create_view_table_for_user(User.objects.get(username='admin'))
+        #self.__create_view_table_for_user(User.objects.get(username='ODS'))
+        users = users_in_res(self.number, )
+        for user in users:
+            self.__create_view_table_for_user(user)

@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 import django
 
-from tests import create_view_tables
+from tm_project_django.clases.classes_for_view.classes_for_view import View_tables
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
@@ -27,7 +27,8 @@ def save_SMS_in_db(number,text):
     sms_message_db.ps = filter_ps(number)
     sms_message_db.save()
     # сюда функцию и в нее ID SMS
-    create_view_tables(number, sms_message_db.id)
+    view_tables = View_tables(number, sms_message_db.id)
+    view_tables.create_view_tables()
     # сюда надо модуль парсинга СМС
 
 class SMS_creator():
