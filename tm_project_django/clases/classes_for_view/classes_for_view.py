@@ -55,11 +55,16 @@ def filter_ps(number):
         return Ps.objects.get(tel_number="111")
 
 
-def users_in_res(number, notification):
+def users_in_res(number, notification=None):
     ps = filter_ps(number)
     res = ps.res.name
-    users = User.objects.filter(groups__name = res).select_related('profile')
-    return users.filter(profile__notification=notification)
+    if notification is None:
+        return User.objects.filter(groups__name=res)
+    elif notification is True:
+        users = User.objects.filter(groups__name=res).select_related('profile')
+        return users.filter(profile__notification=notification)
+    else:
+        return User.objects.filter(groups__name=res)
 
 class View_tables():
 
@@ -77,8 +82,6 @@ class View_tables():
 
     def create_view_tables(self):
 
-        #self.__create_view_table_for_user(User.objects.get(username='admin'))
-        #self.__create_view_table_for_user(User.objects.get(username='ODS'))
-        users = users_in_res(self.number, )
+        users = users_in_res(self.number )
         for user in users:
             self.__create_view_table_for_user(user)

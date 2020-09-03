@@ -1,0 +1,8 @@
+ File "/home/mamzin/code/tm_project_django/tm_project_django/clases/sms_modules/handleSMS.py", line 20, in handleSms
+    message.save_SMS_fragments_in_db(sms.udh[0].data)
+  File "/home/mamzin/code/tm_project_django/tm_project_django/clases/sms_modules/SMS_creator.py", line 62, in save_SMS_fragments_in_db
+    temp_list[3]))
+UnicodeEncodeError: 'utf-8' codec can't encode characters in position 215-224: surrogates not allowed
+
+сообщения со смайлами ломают кодировку сообщений
+-_____________________________________________________________________________________________________________________

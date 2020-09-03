@@ -10,3 +10,11 @@ django.setup()
 from my_app.models import Sms_message, Ps, Viewed_messages, Profile
 from django.contrib.auth.models import Group, User
 
+notification = False
+
+if notification is None:
+    print(notification)
+elif notification is True:
+    print(notification)
+else:
+    print(notification)

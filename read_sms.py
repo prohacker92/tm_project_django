@@ -4,10 +4,10 @@ from gsmmodem.modem import GsmModem
 from datetime import datetime
 import logging
 
-#import os
-#import django
-#os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
-#django.setup()
+import os
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
+django.setup()
 
 from tm_project_django.clases.sms_modules.handleSMS import handleSms
 

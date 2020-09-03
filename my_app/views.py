@@ -33,40 +33,19 @@ def table(request):
     user_name = request.user.username
     time_zone = " (МСК)"
 
-    #messages, v_mess = toolView.check_view(user_name, SHOW_VIEWED_CONTENT)
     messages = toolView.check_view(user_name, SHOW_VIEWED_CONTENT)
 
     data = {"messages": messages, "username": user_name, "time_zone": time_zone}
     return render(request,"table.html", context=data)
 
-"""
-@login_required
-def view_sms(request, id):
-    try:
-        user = User.objects.get(username=request.user.username)
-        message = Sms_message.objects.get(id=id)
-        v_message = Viewed_messages()
-        v_message.id_SMS = message
-        v_message.user = user
-        v_message.status = True
-        v_message.save()
-        return HttpResponseRedirect("/")
-    except message.DoesNotExist:
-        return HttpResponseNotFound("<h2>Message not found</h2>")
-"""
 
 @login_required
 def view_sms(request, id):
     try:
         user = User.objects.get(username=request.user.username)
-        #message = Sms_message.objects.get(id=id)
         v_message = Viewed_messages.objects.get(user=user,id=id)
-        #v_message.id_SMS = message
-        #v_message.user = user
         v_message.status_view = True
         v_message.save(update_fields=["status_view"])
         return HttpResponseRedirect("/")
     except v_message.DoesNotExist:
         return HttpResponseNotFound("<h2>Message not found</h2>")
-
-#status_view
