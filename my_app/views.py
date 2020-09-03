@@ -9,20 +9,24 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 
-SHOW_VIEWED_CONTENT = False# переделать эту ебетину. скорее всего в виде словаря(user:check)
+#SHOW_VIEWED_CONTENT = False# переделать эту ебетину. скорее всего в виде словаря(user:check)
 
 @login_required
 def index(request):
     toolView = ToolForView()
     checkForm = CheckForm()
+    try:
+        show_viwed_sms = request.session['checkBox_status']
+    except KeyError:
+        show_viwed_sms = False
+
     if request.POST:
-        global SHOW_VIEWED_CONTENT
-        SHOW_VIEWED_CONTENT = request.POST['checkBox']
+        show_viwed_sms = request.session['checkBox_status'] = request.POST['checkBox']
 
     user_name = request.user.username
     time_zone = " (МСК)"
-    #messages, v_mess = toolView.check_view(user_name, SHOW_VIEWED_CONTENT)
-    messages = toolView.check_view(user_name, SHOW_VIEWED_CONTENT)
+
+    messages = toolView.check_view(user_name, show_viwed_sms)
 
     data = {"messages": messages, "username": user_name, "time_zone": time_zone, 'checkForm':checkForm,}
     return render(request, "index.html", context=data)
@@ -32,8 +36,9 @@ def table(request):
     toolView = ToolForView()
     user_name = request.user.username
     time_zone = " (МСК)"
+    show_viwed_sms = request.session['checkBox_status']
 
-    messages = toolView.check_view(user_name, SHOW_VIEWED_CONTENT)
+    messages = toolView.check_view(user_name, show_viwed_sms)
 
     data = {"messages": messages, "username": user_name, "time_zone": time_zone}
     return render(request,"table.html", context=data)

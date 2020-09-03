@@ -36,16 +36,11 @@ def getUserMessages(user_name):
 
 class ToolForView:
 
-    def check_view(self, user_name, SHOW_VIEWED_CONTENT):
+    def check_view(self, user_name, show_viwed_sms):
 
-        #v_messages = Viewed_messages.objects.filter(user__username=user_name)
-        if SHOW_VIEWED_CONTENT == "true":
-            print(SHOW_VIEWED_CONTENT)
-            print(Viewed_messages.objects.filter(user__username=user_name, status_view=True))
+        if show_viwed_sms == "true":
             return Viewed_messages.objects.filter(user__username=user_name, status_view=True)
         else:
-            print(SHOW_VIEWED_CONTENT)
-            print(Viewed_messages.objects.filter(user__username=user_name, status_view=False))
             return Viewed_messages.objects.filter(user__username=user_name, status_view=False)
 
 def filter_ps(number):
