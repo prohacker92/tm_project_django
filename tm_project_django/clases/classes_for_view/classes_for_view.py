@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User, Group
 
 from my_app.models import Sms_message, Viewed_messages, Ps
@@ -47,16 +49,20 @@ class View_tables():
         self.number = tel_number_ps
         self.sms_id = sms_id
 
-    def __create_view_table_for_user(self, user):
+    def __create_view_table_for_user(self, user, status_view, datetime):
         viw_sms_db = Viewed_messages()
         viw_sms_db.user = User.objects.get(id=user.id)
         viw_sms_db.id_SMS = Sms_message.objects.get(id=self.sms_id)
-        viw_sms_db.status_view = False
+        viw_sms_db.status_view = status_view
+        viw_sms_db.datetime_view = datetime
+        viw_sms_db.sms_notification = False
         viw_sms_db.save()
 
 
-    def create_view_tables(self):
+
+
+    def create_view_tables(self, status_view=False, datetime=None):
     #создание таблиц просмотров СМС
         users = users_in_res(self.number)
         for user in users:
-            self.__create_view_table_for_user(user)
+            self.__create_view_table_for_user(user, status_view, datetime)

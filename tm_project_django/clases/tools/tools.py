@@ -4,6 +4,9 @@ from datetime import datetime
 from time import sleep
 import os
 import django
+
+from tm_project_django.clases.classes_for_view.classes_for_view import View_tables
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
 
@@ -79,3 +82,12 @@ def from_file_to_database_sms():
             sms.save()
 
 #from_file_to_database_sms()
+
+def tablview_for_allusers():
+    #создание таблиц просмотра для всех пользователей
+    for sms in Sms_message.objects.all():
+        tab_viw = View_tables(sms.number, sms.id)
+        tab_viw.create_view_tables()
+        print(sms.id)
+
+#tablview_for_allusers()

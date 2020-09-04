@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseNotFound
@@ -50,7 +52,8 @@ def view_sms(request, id):
         user = User.objects.get(username=request.user.username)
         v_message = Viewed_messages.objects.get(user=user,id=id)
         v_message.status_view = True
-        v_message.save(update_fields=["status_view"])
+        v_message.datetime_view = datetime.now()
+        v_message.save(update_fields=["status_view","datetime_view"])
         return HttpResponseRedirect("/")
     except v_message.DoesNotExist:
         return HttpResponseNotFound("<h2>Message not found</h2>")

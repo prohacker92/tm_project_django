@@ -4,10 +4,6 @@ from django.contrib import admin
 from my_app.models import Sms_message, Ps, Viewed_messages, Profile
 
 
-#@admin.register(Res)
-#class ResAdmin(admin.ModelAdmin):
-#    list_display = ("name",)
-
 @admin.register(Ps)
 class PsAdmin(admin.ModelAdmin):
     list_display = ("name","tel_number","res")
@@ -15,12 +11,12 @@ class PsAdmin(admin.ModelAdmin):
 
 @admin.register(Sms_message)
 class MessagesAdmin(admin.ModelAdmin):
-    list_display = ("ps","date","time","text_sms")
+    list_display = ('id',"ps","date","time","text_sms")
 
 
 @admin.register(Viewed_messages)
 class Viewed_messages_Admin(admin.ModelAdmin):
-    list_display = ("id_SMS","user","status_view")
+    list_display = ("id_SMS","user","status_view","datetime_view","sms_notification")
 
 @admin.register(Profile)
 class Profile_Admin(admin.ModelAdmin):
