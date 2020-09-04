@@ -4,7 +4,7 @@ from django.http import HttpResponseNotFound
 
 from tm_project_django.clases.classes_for_view.classes_for_view import ToolForView
 from my_app.form import CheckForm
-from .models import Sms_message, Viewed_messages
+from .models import Viewed_messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 

@@ -5,33 +5,13 @@ from my_app.models import Sms_message, Viewed_messages, Ps
 
 
 def getUserPs(username):
-    if username == "admin":
-        return Ps.objects.all()
-
-    elif username == "ODS":
-        return Ps.objects.all().exclude(name="ТЕСТ ПС1").exclude(name="не зарегистрирован")
-    else:
-        group = Group.objects.get(user__username=username)
-        return Ps.objects.filter(res=group)
+    #список подстанций данного пользователя
+    return Ps.objects.filter(res__user__username=username).select_related('res')
 
 
-def getUserMessages(user_name):
-    #переписать. оптимизировать запрос
-    messages = None
-    if user_name == "admin":
-        messages = Sms_message.objects.all()
-
-    elif user_name == "ODS":
-        messages = Sms_message.objects.all().exclude(ps="ТЕСТ ПС1").exclude(ps="не зарегистрирован")
-        print(user_name)
-    else:
-        for g in Group.objects.all():
-            for u in User.objects.filter(groups__name=g.name):
-                if user_name == u.username:
-                    print(g.name)
-                    messages = Sms_message.objects.filter(ps__res=g.name)
-
-    return messages
+def getUserMessages(username):
+    #список сообщений данного пользователя
+    return Sms_message.objects.filter(viewed_messages__user__username=username).select_related()
 
 
 class ToolForView:
@@ -76,7 +56,7 @@ class View_tables():
 
 
     def create_view_tables(self):
-
-        users = users_in_res(self.number )
+    #создание таблиц просмотров СМС
+        users = users_in_res(self.number)
         for user in users:
             self.__create_view_table_for_user(user)
