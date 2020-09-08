@@ -18,6 +18,7 @@ from django.contrib.auth.models import Group, User
 def edit_in_models():
     # определить статус всех сообщений(просмотренно\нет)
     for viw in Viewed_messages.objects.all():
+        print("tabl - " + viw.id)
         viw.status_view = True
         viw.save(update_fields=["status_view"])
 

@@ -18,20 +18,17 @@ class Read_SMS():
         self.modem = GsmModem(PORT, SPEED)
         self.modem.smsTextMode = False
         self.modem.connect(PIN)
-        self.sms_list = []
-        self.sms_status = None
         print('Initializing modem...')
 
     def read_sms(self):
         #считывает сообщения из памяти (me,sm,mt,) и удаляет прочитанные
         for sms in self.modem.listStoredSms(memory='me', delete=True):
             handleSms(sms)
-            self.sms_list.append(sms)
 
     def send_sms(self, number='+79179812832', message="TEST"):
         # отправка сообщений. ДОБАВИТЬ ОТЧЕТ О ДОСТАВКЕ
-
-        self.sms_status = self.modem.sendSms(number, message)
+        pass
+        #self.sms_status = self.modem.sendSms(number, message)
 
     def modem_close(self):
         self.modem.close()

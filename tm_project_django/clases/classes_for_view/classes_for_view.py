@@ -4,8 +4,6 @@ from django.contrib.auth.models import User, Group
 
 from my_app.models import Sms_message, Viewed_messages, Ps
 
-
-
 def getUserPs(username):
     #список подстанций данного пользователя
     return Ps.objects.filter(res__user__username=username).select_related('res')
@@ -57,9 +55,6 @@ class View_tables():
         viw_sms_db.datetime_view = datetime
         viw_sms_db.sms_notification = False
         viw_sms_db.save()
-
-
-
 
     def create_view_tables(self, status_view=False, datetime=None):
     #создание таблиц просмотров СМС
