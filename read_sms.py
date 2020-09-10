@@ -1,11 +1,18 @@
 from __future__ import print_function
+
+import sys
 from time import sleep
 from gsmmodem.modem import GsmModem
 from datetime import datetime
 import logging
+from threading import Thread
 
 import os
 import django
+
+from tests import Manager_notifications
+from tm_project_django.clases.sms_modules.SMS_creator import create_sms_to_send
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
 
@@ -21,30 +28,49 @@ class Read_SMS():
         print('Initializing modem...')
 
     def read_sms(self):
-        #считывает сообщения из памяти (me,sm,mt,) и удаляет прочитанные
+        # считывает сообщения из памяти (me,sm,mt,) и удаляет прочитанные
         for sms in self.modem.listStoredSms(memory='me', delete=True):
             handleSms(sms)
 
     def send_sms(self, number='+79179812832', message="TEST"):
         # отправка сообщений. ДОБАВИТЬ ОТЧЕТ О ДОСТАВКЕ
-        pass
-        #self.sms_status = self.modem.sendSms(number, message)
+        self.modem.sendSms(number, message)
 
     def modem_close(self):
         self.modem.close()
         print("модем отключен")
 
-def run():
-    worker = Read_SMS()
 
-    try:
-        while True:
 
-            worker.read_sms()
+thrd_stop = False
+def start_manager_notif(worker):
+    v = Manager_notifications(viewing_time=1)
+    while not thrd_stop:
+        v.run_manager(worker)
 
-            sleep(1)
+global str_sms
+str_sms =[]
+worker = Read_SMS()
+thrd = Thread(target=start_manager_notif, args=(str_sms,))
+thrd.start()
 
-    finally:
-        worker.modem_close()
+try:
+    while thrd.is_alive():
+        worker.read_sms()
+        if str_sms:
+            for t in str_sms:
+                print(create_sms_to_send(t))
+                number, text = create_sms_to_send(t)
+                worker.send_sms(number=number, message=text)
+            str_sms.clear()
+        sleep(1)
 
-run()
+finally:
+    thrd_stop = True
+    thrd.join()
+    worker.modem_close()
+
+
+
+
+

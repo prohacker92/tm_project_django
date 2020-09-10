@@ -71,3 +71,6 @@ class SMS_creator():
             print('================================')
 
 
+def create_sms_to_send(string):
+    number, text = string.strip().split(';', 1)
+    return number, text
