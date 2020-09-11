@@ -5,32 +5,26 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponseNotFound
 
 from tm_project_django.clases.classes_for_view.classes_for_view import ToolForView
-from my_app.form import CheckForm
+from my_app.form import ChoiceForm
 from .models import Viewed_messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-
-#SHOW_VIEWED_CONTENT = False# переделать эту ебетину. скорее всего в виде словаря(user:check)
-
 @login_required
 def index(request):
     toolView = ToolForView()
-    checkForm = CheckForm()
+    choice = ChoiceForm()
     try:
-        show_viwed_sms = request.session['checkBox_status']
+        selected_interval = request.session['choice_status']
     except KeyError:
-        show_viwed_sms = False
-
+        selected_interval = 'False'
     if request.POST:
-        show_viwed_sms = request.session['checkBox_status'] = request.POST['checkBox']
-
+        selected_interval = request.session['choice_status'] = request.POST['choice']
     user_name = request.user.username
     time_zone = " (МСК)"
+    messages = toolView.check_view(user_name, selected_interval)
 
-    messages = toolView.check_view(user_name, show_viwed_sms)
-
-    data = {"messages": messages, "username": user_name, "time_zone": time_zone, 'checkForm':checkForm,}
+    data = {"messages": messages, "username": user_name, "time_zone": time_zone, 'choiceForm': choice,}
     return render(request, "index.html", context=data)
 
 @login_required
@@ -38,12 +32,12 @@ def table(request):
     toolView = ToolForView()
     user_name = request.user.username
     time_zone = " (МСК)"
-    show_viwed_sms = request.session['checkBox_status']
+    selected_interval = request.session['choice_status']
 
-    messages = toolView.check_view(user_name, show_viwed_sms)
+    messages = toolView.check_view(user_name, selected_interval)
 
     data = {"messages": messages, "username": user_name, "time_zone": time_zone}
-    return render(request,"table.html", context=data)
+    return render(request, "table.html", context=data)
 
 
 @login_required

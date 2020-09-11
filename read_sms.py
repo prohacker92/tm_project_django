@@ -10,8 +10,8 @@ from threading import Thread
 import os
 import django
 
-from tests import Manager_notifications
 from tm_project_django.clases.sms_modules.SMS_creator import create_sms_to_send
+from tm_project_django.clases.sms_modules.manager_notifications import Manager_notifications
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()

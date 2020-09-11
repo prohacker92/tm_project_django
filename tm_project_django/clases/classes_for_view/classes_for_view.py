@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.contrib.auth.models import User, Group
 
@@ -16,10 +16,11 @@ def getUserMessages(username):
 
 class ToolForView:
 
-    def check_view(self, user_name, show_viwed_sms):
-
-        if show_viwed_sms == "true":
-            return Viewed_messages.objects.filter(user__username=user_name, status_view=True)
+    def check_view(self, user_name, selected_interval):
+        #gte
+        if selected_interval != 'False':
+            delta = datetime.now() - timedelta(days=int(selected_interval))
+            return Viewed_messages.objects.filter(user__username=user_name, status_view=True, id_SMS__date__gte=delta)
         else:
             return Viewed_messages.objects.filter(user__username=user_name, status_view=False)
 

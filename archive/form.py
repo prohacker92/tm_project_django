@@ -25,6 +25,3 @@ class ArchiveForm(forms.Form):
 
     select_list = forms.MultipleChoiceField()
 
-    # start_date = forms.DateField(label='За период OT',  widget=SelectDateWidget(years=range(year, year - 2, -1)), required=False)
-    # end_date = forms.DateField(label='ДО',  initial=datetime.date.today,
-    #                          widget=SelectDateWidget(years=range(year, year - 2, -1)), required=False)
