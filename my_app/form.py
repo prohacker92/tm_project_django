@@ -11,4 +11,4 @@ class ChoiceForm(forms.Form):
       (7, "неделю"),
       (30, "месяц"),
    )
-   choice = forms.ChoiceField(choices=INTERVAL_CHOICES, label="показать просмотренные")
+   choice = forms.ChoiceField(choices=INTERVAL_CHOICES, label="показать просмотренные за")

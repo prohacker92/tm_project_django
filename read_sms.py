@@ -1,21 +1,14 @@
 from __future__ import print_function
-
-import sys
 from time import sleep
 from gsmmodem.modem import GsmModem
-from datetime import datetime
 import logging
 from threading import Thread
-
 import os
 import django
-
-from tm_project_django.clases.sms_modules.SMS_creator import create_sms_to_send
-from tm_project_django.clases.sms_modules.manager_notifications import Manager_notifications
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
-
+from tm_project_django.clases.sms_modules.SMS_creator import create_sms_to_send
+from tm_project_django.clases.sms_modules.notifications import Manager_notifications
 from tm_project_django.clases.sms_modules.handleSMS import handleSms
 
 

@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from time import sleep
 
+from my_app.models import Viewed_messages
+
 
 class Manager_notifications():
 
@@ -18,7 +20,6 @@ class Manager_notifications():
     def run_manager(self,str_sms):
 
         unseen_sms = self.search_for_unseen_sms()
-        print("thread")
         if unseen_sms:
             for v in unseen_sms:
                 sms_messages = "{};(УОПИ сервер) ({}) {}".format(v.user.profile.phone_num_for_notif, v.id_SMS.ps.name,
@@ -29,3 +30,6 @@ class Manager_notifications():
                 v.sms_notification = True
                 v.save(update_fields=["sms_notification"])
         sleep(self.frequency_check)
+
+
+
