@@ -4,7 +4,7 @@ from django.db import models
 from my_app.models import Ps
 
 class Signal_type(models.Model):
-    type = models.CharField(max_length=10, primary_key=True)
+    type = models.CharField(max_length=12, primary_key=True)
 
 class Voltage(models.Model):
     value = models.CharField(max_length=10, primary_key=True)
@@ -18,6 +18,7 @@ class Signal(models.Model):
     name = models.CharField(max_length=50,blank=True)
     status = models.ForeignKey(Signal_status, on_delete=models.CASCADE)
     ps = models.ForeignKey(Ps, on_delete=models.CASCADE)
+    date_up = models.DateTimeField()
 """----------------------------------------------------------------------------------------------------"""
 
 class Controller_type(models.Model):

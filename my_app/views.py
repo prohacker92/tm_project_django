@@ -47,7 +47,7 @@ def view_sms(request, id):
         v_message = Viewed_messages.objects.get(user=user,id=id)
         v_message.status_view = True
         v_message.datetime_view = datetime.now()
-        v_message.save(update_fields=["status_view","datetime_view"])
+        v_message.save(update_fields=["status_view", "datetime_view"])
         return HttpResponseRedirect("/")
     except v_message.DoesNotExist:
         return HttpResponseNotFound("<h2>Message not found</h2>")

@@ -5,6 +5,9 @@ import logging
 from threading import Thread
 import os
 import django
+
+from tm_project_django.clases.sms_modules.sms_request import SmsRequest
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
 from tm_project_django.clases.sms_modules.SMS_creator import create_sms_to_send
@@ -47,8 +50,12 @@ worker = Read_SMS()
 thrd = Thread(target=start_manager_notif, args=(str_sms,))
 thrd.start()
 
+sms_request = SmsRequest()
+
 try:
     while thrd.is_alive():
+        number_for_send = sms_request.get_send_status()
+        #print(number_for_send)
         worker.read_sms()
         if str_sms:
             for t in str_sms:
@@ -56,6 +63,11 @@ try:
                 number, text = create_sms_to_send(t)
                 worker.send_sms(number=number, message=text)
             str_sms.clear()
+        if number_for_send:
+            #message = "/00000 INS OUTS"
+            message = "КОНТРОЛЛЕР ВКЛЮЧЕН ОХРАНА ПИТ. В НОРМЕ (15,0v) АКБ 100% Т 42C В_10кВ_Ф.2 ОТКЛЮЧЕН !"
+            worker.send_sms(number=number_for_send, message=message)
+            sms_request.clear_file()
         sleep(1)
 
 finally:
