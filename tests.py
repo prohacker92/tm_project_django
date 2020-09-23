@@ -43,7 +43,9 @@ class SignalManager:
 
     def find_type(self, signal):
         if signal.startswith("ДВЕРЬ"): #переделать, взять из базы список
+
             self.type, signal = signal.split(" ", 1)
+            print("найдена ", self.type)
             return signal
         try:
             self.type, signal = signal.split("_", 1)
@@ -62,9 +64,9 @@ class SignalManager:
     def find_voltage(self, signal):
         if signal.startswith("10кВ") or signal.startswith("35кВ") or signal.startswith("110кВ"): #взять из базы список напряжений
             self.voltage, signal = signal.split("_", 1)
-            return signal
+            return True, signal
         else:
-            return signal
+            return False, signal
 
     def find_name(self, signal):
         self.name, signal = signal.split(" ")
@@ -117,12 +119,12 @@ class SignalManager:
 
         print(self.sms_signals)
         for signal in self.sms_signals:
-            try:
+            #try:
                 signal = signal.strip().strip(" !")
                 signal = self.find_type(signal)
                 if signal:
-                    signal = self.find_voltage(signal)
-                    if signal:
+                    is_voltage, signal = self.find_voltage(signal)
+                    if is_voltage:
                         signal = self.find_name(signal)
                         signal = self.find_status(signal)
                         self.print_signal()
@@ -137,9 +139,9 @@ class SignalManager:
                         self.to_clear_values()
                 else:
                     continue
-            except ValueError:
-                print(f"ошибка в парсинге {signal}")
-                continue
+            #except ValueError:
+            #    print(f"ошибка в парсинге {signal}")
+             #   continue
 
 
 
