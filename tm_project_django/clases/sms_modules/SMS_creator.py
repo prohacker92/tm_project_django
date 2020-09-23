@@ -36,43 +36,51 @@ def save_SMS_in_db(number,text):
 class SMS_creator():
     # Склейка СМС сообщений
     def __init__(self):
-        self.dict = {} # словарь для временного хранения чистей СМС
+        self.dict = {} # словарь для временного хранения частей СМС
         self.key_SMS = "" # для id смс
 
     def set_SMS(self, number, text, udh_data=[]):
         # Склейка
-        # udh_data = [] служебная строка СМС, хранить id, количество частей, номер части СМС
         self.key_SMS = udh_data[0]
         if not self.dict:
+            sms_list = []
+            for i in range(udh_data[-2]):
+                sms_list.append('_')
             # словарь пуст, запись в словарь
-            self.dict[udh_data[0]] = [udh_data[-2], udh_data[-1], number, text]
+            self.dict[udh_data[0]] = sms_list
+            self.dict[udh_data[0]][udh_data[-1]-1] = [udh_data[-2], udh_data[-1], number, text]
 
         elif self.dict.get(udh_data[0]):
             # Дописываем СМС
-            temp_text = self.dict.get(udh_data[0])[3]
-            self.dict[udh_data[0]] = [udh_data[-2], udh_data[-1], number, temp_text + text]
+            self.dict[udh_data[0]][udh_data[-1]-1] = [udh_data[-2], udh_data[-1], number, text]
         else:
             # Запись новой СМС
-            self.dict[udh_data[0]] = [udh_data[-2], udh_data[-1], number, text]
+            sms_list = []
+            for i in range(udh_data[-2]):
+                sms_list.append('_')
+            self.dict[udh_data[0]] = sms_list
+            self.dict[udh_data[0]][udh_data[-1] - 1] = [udh_data[-2], udh_data[-1], number, text]
 
     def save_SMS_fragments_in_db(self, udh_data=[]):
         # сохранение в бд и удаление из словаря если собранны все части
-        if udh_data[-2] == udh_data[-1]:
+        if '_' not in self.dict[udh_data[0]]:
             temp_list = self.dict.pop(self.key_SMS)
+            text = []
+            for element in temp_list:
+                text.append(element[-1])
             print('==== Принято большое СМС ====\nНомер: {1}\nВремя: {0}\nСМС: {2}'.format(datetime.now(),
-                                                                                      temp_list[2],
-                                                                                      temp_list[3]))
+                                                                                      temp_list[0][-2],
+                                                                                      "".join(text)))
             print('================================')
             print("содержимое словаря - ", self.dict)
-            save_SMS_in_db(temp_list[2], temp_list[3])
+            save_SMS_in_db(temp_list[0][-2], "".join(text))
         else:
-            print('=== Принято {1} часть СМС из {0} ===\n Номер: {2}'.format(self.dict[self.key_SMS][0],
-                                                                        self.dict[self.key_SMS][1],
-                                                                        self.dict[self.key_SMS][2]))
-            print("содержимое словаря - ", self.dict)
-            print('================================')
+            print('=== Принято {1} часть СМС из {0} ===\nНомер: {2}'.format(udh_data[-2], udh_data[-1],
+                                                                             self.dict[self.key_SMS][udh_data[-1]-1][-2]))
+
 
 
 def create_sms_to_send(string):
-    number, text = string.strip().split(';', 1)
-    return number, text
+    numbers, text = string.strip().split(';', 1)
+    list_numbers = numbers.strip().split(',')
+    return list_numbers, text

@@ -36,8 +36,6 @@ class Read_SMS():
         self.modem.close()
         print("модем отключен")
 
-
-
 thrd_stop = False
 def start_manager_notif(worker):
     v = Manager_notifications(viewing_time=1)
@@ -59,14 +57,14 @@ try:
         worker.read_sms()
         if str_sms:
             for t in str_sms:
-                print(create_sms_to_send(t))
-                number, text = create_sms_to_send(t)
-                worker.send_sms(number=number, message=text)
+                numbers, text = create_sms_to_send(t)
+                for number in numbers:
+                    worker.send_sms(number=number, message=text)
             str_sms.clear()
         if number_for_send:
-            #message = "/00000 INS OUTS"
-            message = "КОНТРОЛЛЕР ВКЛЮЧЕН ОХРАНА ПИТ. В НОРМЕ (15,0v) АКБ 100% Т 42C В_10кВ_Ф.2 ОТКЛЮЧЕН !"
+            message = "/00000 INS OUTS"
             worker.send_sms(number=number_for_send, message=message)
+            print(f"отправлен запрос {message} на номер {number_for_send}")
             sms_request.clear_file()
         sleep(1)
 

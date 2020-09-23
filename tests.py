@@ -18,6 +18,7 @@ from tm_project_django.clases.classes_for_view.classes_for_view import View_tabl
 from my_app.models import Sms_message, Ps, Viewed_messages, Profile
 from django.contrib.auth.models import Group, User
 
+
 sms = "КОНТРОЛЛЕР ВКЛЮЧЕН\n ОХРАНА ПИТ. В НОРМЕ (15,0v)\n АКБ 100% Т 42C \nВ_10кВ_Ф.2 ОТКЛЮЧЕН !\n В_10кВ_Ф.3 ОТКЛЮЧЕН !" \
       "\n ДВЕРЬ ЗАКРЫТА ! \nВ_35кВ_Т_1 ВКЛЮЧЕН !\n В_10кВ_Т_1 ОТКЛЮЧЕН !\n ТН_10кВ_N1 ЗЕМЛЯ_В_СЕТИ !" \
       "\n В_10кВ_Ф.1 ОТКЛЮЧЕН !\n Питание_БПЗ_Т_1 ОТКЛЮЧЕНО !\n АВАРИЙНЫЙ_СИГНАЛ ВКЛЮЧЕН !\n ПРЕДУПРЕД_СИГН ВКЛЮЧЕН !" \
@@ -143,17 +144,81 @@ class SignalManager:
             #    print(f"ошибка в парсинге {signal}")
              #   continue
 
+#_______________________________________________________________________________________________________________
+
+
+class SMS_creator():
+    # Склейка СМС сообщений
+    def __init__(self):
+        self.dict = {} # словарь для временного хранения частей СМС
+        self.key_SMS = "" # для id смс
+
+    def set_SMS(self, number, text, udh_data=[]):
+        # Склейка
+        # udh_data = [] служебная строка СМС, хранить id, количество частей, номер части СМС
+        self.key_SMS = udh_data[0]
+        if not self.dict:
+            sms_list = []
+            for i in range(udh_data[-2]):
+                sms_list.append('_')
+            print(sms_list)
+            print(udh_data[-1]-1)
+            # словарь пуст, запись в словарь
+            #self.dict[udh_data[0]] = [udh_data[-2], udh_data[-1], number, text]
+            self.dict[udh_data[0]] = sms_list
+            self.dict[udh_data[0]][udh_data[-1]-1] = [udh_data[-2], udh_data[-1], number, text]
+            print(self.dict[udh_data[0]])
+
+        elif self.dict.get(udh_data[0]):
+            # Дописываем СМС
+            #temp_text = self.dict.get(udh_data[0])[3]
+            #self.dict[udh_data[0]] = [udh_data[-2], udh_data[-1], number, temp_text + text]
+            self.dict[udh_data[0]][udh_data[-1]-1] = [udh_data[-2], udh_data[-1], number, text]
+        else:
+            # Запись новой СМС
+            #self.dict[udh_data[0]] = [udh_data[-2], udh_data[-1], number, text]
+            sms_list = []
+            for i in range(udh_data[-2]):
+                sms_list.append('_')
+            self.dict[udh_data[0]] = sms_list
+            self.dict[udh_data[0]][udh_data[-1] - 1] = [udh_data[-2], udh_data[-1], number, text]
+
+    def save_SMS_fragments_in_db(self, udh_data=[]):
+        # сохранение в бд и удаление из словаря если собранны все части
+        #if udh_data[-2] == udh_data[-1]:
+        if '_' not in self.dict[udh_data[0]]:
+            temp_list = self.dict.pop(self.key_SMS)
+            text = []
+            for element in temp_list:
+                text.append(element[-1])
+            print('==== Принято большое СМС ====\nНомер: {1}\nВремя: {0}\nСМС: {2}'.format(datetime.now(),
+                                                                                      temp_list[0][-2],
+                                                                                      "".join(text)))
+            print('================================')
+            print("содержимое словаря - ", self.dict)
+            #save_SMS_in_db(temp_list[0][-2], "".join(text))
+        else:
+            print('=== Принято {1} часть СМС из {0} ===\n Номер: {2}'.format(udh_data[-2], udh_data[-1],
+                                                                             self.dict[self.key_SMS][udh_data[-1]-1][-2]))
 
 
 
 
+def sms_tester():
+    text1 = "test1"
+    text2 = "test2"
+    text3 = "test3"
+    udn1 = [1, 3, 1]
+    udn2 = [1, 3, 2]
+    udn3 = [1, 3, 3]
+
+    sms_test = SMS_creator()
+    sms_test.set_SMS('111', text1, udn1)
+    sms_test.save_SMS_fragments_in_db(udn1)
+    sms_test.set_SMS('111', text2, udn2)
+    sms_test.save_SMS_fragments_in_db(udn2)
+    sms_test.set_SMS('111', text3, udn3)
+    sms_test.save_SMS_fragments_in_db(udn3)
 
 
-
-#test = SignalManager("ТЕСТ ПС1", sms)
-#test.run()
-#smsParser(sms)
-#print(datetime.now())
-#smsParser2()
-
-
+#sms_tester()
