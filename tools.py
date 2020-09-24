@@ -5,11 +5,9 @@ from time import sleep
 import os
 import django
 
-from tm_project_django.clases.classes_for_view.classes_for_view import View_tables
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
-
+from tm_project_django.clases.classes_for_view.classes_for_view import View_tables
 from my_app.models import Sms_message, Ps, Viewed_messages, Profile
 from django.contrib.auth.models import Group, User
 
@@ -25,10 +23,10 @@ def edit_in_models():
 #edit_in_models()
 
 
-#with open('file_ps_bd.txt','w') as out:
+with open('file_ps_bd.txt', 'w') as out:
     #все подстанции из базы в файл
-#    for ps in Ps.objects.all():
-#       out.write('{}:{}:{}\n'.format(ps.name, ps.tel_number, ps.res.name))
+    for ps in Ps.objects.all():
+        out.write('{}:{}:{}\n'.format(ps.name, ps.tel_number, ps.res.name))
 
 #with open('file_sms_bd.txt','w') as out:
     #все сообщения из базы в файл

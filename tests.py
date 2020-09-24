@@ -8,7 +8,7 @@ import os
 import django
 from django.core.exceptions import MultipleObjectsReturned
 
-
+from tm_project_django.clases.sms_modules.SMS_creator import SMS_creator
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
@@ -145,65 +145,7 @@ class SignalManager:
              #   continue
 
 #_______________________________________________________________________________________________________________
-
-
-class SMS_creator():
-    # Склейка СМС сообщений
-    def __init__(self):
-        self.dict = {} # словарь для временного хранения частей СМС
-        self.key_SMS = "" # для id смс
-
-    def set_SMS(self, number, text, udh_data=[]):
-        # Склейка
-        # udh_data = [] служебная строка СМС, хранить id, количество частей, номер части СМС
-        self.key_SMS = udh_data[0]
-        if not self.dict:
-            sms_list = []
-            for i in range(udh_data[-2]):
-                sms_list.append('_')
-            print(sms_list)
-            print(udh_data[-1]-1)
-            # словарь пуст, запись в словарь
-            #self.dict[udh_data[0]] = [udh_data[-2], udh_data[-1], number, text]
-            self.dict[udh_data[0]] = sms_list
-            self.dict[udh_data[0]][udh_data[-1]-1] = [udh_data[-2], udh_data[-1], number, text]
-            print(self.dict[udh_data[0]])
-
-        elif self.dict.get(udh_data[0]):
-            # Дописываем СМС
-            #temp_text = self.dict.get(udh_data[0])[3]
-            #self.dict[udh_data[0]] = [udh_data[-2], udh_data[-1], number, temp_text + text]
-            self.dict[udh_data[0]][udh_data[-1]-1] = [udh_data[-2], udh_data[-1], number, text]
-        else:
-            # Запись новой СМС
-            #self.dict[udh_data[0]] = [udh_data[-2], udh_data[-1], number, text]
-            sms_list = []
-            for i in range(udh_data[-2]):
-                sms_list.append('_')
-            self.dict[udh_data[0]] = sms_list
-            self.dict[udh_data[0]][udh_data[-1] - 1] = [udh_data[-2], udh_data[-1], number, text]
-
-    def save_SMS_fragments_in_db(self, udh_data=[]):
-        # сохранение в бд и удаление из словаря если собранны все части
-        #if udh_data[-2] == udh_data[-1]:
-        if '_' not in self.dict[udh_data[0]]:
-            temp_list = self.dict.pop(self.key_SMS)
-            text = []
-            for element in temp_list:
-                text.append(element[-1])
-            print('==== Принято большое СМС ====\nНомер: {1}\nВремя: {0}\nСМС: {2}'.format(datetime.now(),
-                                                                                      temp_list[0][-2],
-                                                                                      "".join(text)))
-            print('================================')
-            print("содержимое словаря - ", self.dict)
-            #save_SMS_in_db(temp_list[0][-2], "".join(text))
-        else:
-            print('=== Принято {1} часть СМС из {0} ===\n Номер: {2}'.format(udh_data[-2], udh_data[-1],
-                                                                             self.dict[self.key_SMS][udh_data[-1]-1][-2]))
-
-
-
-
+"""
 def sms_tester():
     text1 = "test1"
     text2 = "test2"
@@ -219,6 +161,14 @@ def sms_tester():
     sms_test.save_SMS_fragments_in_db(udn2)
     sms_test.set_SMS('111', text3, udn3)
     sms_test.save_SMS_fragments_in_db(udn3)
-
+"""
 
 #sms_tester()
+
+def from_bd_to_file_group():
+    #all group to file
+    with open('file_groups_bd.txt', 'w') as out:
+        for group in Group.objects.all():
+            out.write('{}\n'.format(group.name))
+
+from_bd_to_file_group()

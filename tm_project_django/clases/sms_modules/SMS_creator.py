@@ -3,14 +3,11 @@ from datetime import datetime
 import os
 import django
 
-from tests import SignalManager
-from tm_project_django.clases.classes_for_view.classes_for_view import View_tables
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
 
 from my_app.models import Ps, Sms_message
-
+from tm_project_django.clases.classes_for_view.classes_for_view import View_tables
 
 
 def filter_ps(number):

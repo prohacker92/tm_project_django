@@ -1,12 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django import forms
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 
 # Create your views here.
 from archive.form import ArchiveForm, DateForm
-from my_app.models import Sms_message, Ps
-from tm_project_django.clases.classes_for_view.classes_for_view import getUserMessages, getUserPs
+from my_app.models import Ps
+from tm_project_django.clases.classes_for_view.classes_for_view import getUserMessages
 import datetime
 
 @login_required
