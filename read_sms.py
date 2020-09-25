@@ -1,18 +1,18 @@
 from __future__ import print_function
 from time import sleep
-from gsmmodem.modem import GsmModem
 import logging
 from threading import Thread
+from gsmmodem import GsmModem
+
 import os
 import django
-
-from tm_project_django.clases.sms_modules.sms_request import SmsRequest
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
+
 from tm_project_django.clases.sms_modules.SMS_creator import create_sms_to_send
 from tm_project_django.clases.sms_modules.notifications import Manager_notifications
 from tm_project_django.clases.sms_modules.handleSMS import handleSms
+from tm_project_django.clases.sms_modules.sms_request import SmsRequest
 
 
 class Read_SMS():
