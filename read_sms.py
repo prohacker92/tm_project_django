@@ -60,7 +60,12 @@ try:
     while thrd.is_alive():
         number_for_send = sms_request.get_send_status()
         #print(number_for_send)
-        worker.read_sms()
+        try:
+            worker.read_sms()
+        except UnicodeEncodeError as err:
+            print(err)
+            sleep(1)
+            continue
         if str_sms:
             for t in str_sms:
                 numbers, text = create_sms_to_send(t)

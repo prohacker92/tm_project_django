@@ -2,3 +2,5 @@
 /env/
 /venv/
 .idea
+gunicorn_config.py
+bin

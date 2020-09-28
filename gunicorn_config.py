@@ -1,4 +1,4 @@
-command = '/home/mamzin/code/tm_project_django/env/bin/gunicorn'
+command = '/home/mamzin/code/tm_project_django/venv/bin/gunicorn'
 pythonpath = '/home/mamzin/code/tm_project_django/'
 bind = '127.0.0.1:8001'
 workers = 5
