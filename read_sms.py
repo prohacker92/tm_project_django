@@ -2,7 +2,8 @@ from __future__ import print_function
 from time import sleep
 import logging
 from threading import Thread
-from gsmmodem import GsmModem
+
+from gsmmodem import GsmModem, exceptions
 
 import os
 import django
@@ -25,8 +26,13 @@ class Read_SMS():
 
     def read_sms(self):
         # считывает сообщения из памяти (me,sm,mt,) и удаляет прочитанные
-        for sms in self.modem.listStoredSms(memory='me', delete=True):
-            handleSms(sms)
+        try:
+            for sms in self.modem.listStoredSms(memory='me', delete=True):
+                handleSms(sms)
+        except exceptions.TimeoutException as err:
+            print("modem slow", err)
+            sleep(2)
+            return
 
     def send_sms(self, number='+79179812832', message="TEST"):
         # отправка сообщений. ДОБАВИТЬ ОТЧЕТ О ДОСТАВКЕ

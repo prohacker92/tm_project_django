@@ -7,7 +7,7 @@ class SmsRequest:
         self.number = ''
 
     def set_send_status(self, number):
-        with open('send_sms.txt', 'a') as out:
+        with open('send_sms.txt', 'w') as out:
             out.write('{} '.format(number))
 
     def get_send_status(self):

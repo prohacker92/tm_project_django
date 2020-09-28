@@ -3,12 +3,14 @@ from datetime import datetime
 import os
 import django
 
+
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
 
 from my_app.models import Ps, Sms_message
 from tm_project_django.clases.classes_for_view.classes_for_view import View_tables
-
+from tests import SignalManager
 
 def filter_ps(number):
     try:
@@ -24,8 +26,11 @@ def save_SMS_in_db(number,text):
     sms_message_db.text_sms = text
     sms_message_db.ps = filter_ps(number)
     sms_message_db.save()
+    list = (number, text)
+
+    print(list)
     # сюда функцию и в нее ID SMS
-    view_tables = View_tables(number, sms_message_db.id)#попробывать передать sms_messade_db целеком
+    view_tables = View_tables(number, sms_message_db.id)
     view_tables.create_view_tables()
     parser = SignalManager(sms_message_db.ps.name, text)
     parser.run()

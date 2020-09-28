@@ -180,5 +180,5 @@ def sms_tester():
 
 #sms_tester()
 """
-pars = SignalManager("ПС 110кВ Мост", smsps)
-pars.run()
+#pars = SignalManager("ПС 110кВ Мост", smsps)
+#pars.run()

@@ -14,9 +14,9 @@ def handleSms(sms):
       #message.set_SMS(sms)
 
       for i in sms.udh:
-        print("id = ", i.id)
-        print("dataLength = ", i.dataLength)
-        print("dataLength = ", i.data)
+        #print("id = ", i.id)
+        #print("dataLength = ", i.dataLength)
+        print("data = ", i.data)
       message.save_SMS_fragments_in_db(sms.udh[0].data)
     else:
         print('===== Принято короткое СМС =====\nНомер: {0}\nВремя: {1}\nСМС: {2}'.format(sms.number, sms.time, sms.text))
