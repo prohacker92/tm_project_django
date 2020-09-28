@@ -6,13 +6,13 @@ from my_app.models import Viewed_messages
 
 class Manager_notifications():
 
-    def __init__(self, frequency_check = 10, viewing_time = 60):
+    def __init__(self, frequency_check=10, viewing_time=60):
         self.frequency_check = frequency_check
         self.viewing_time = viewing_time
 
 
     def search_for_unseen_sms(self):
-        delta = datetime.now() - timedelta(minutes = self.viewing_time)
+        delta = datetime.now() - timedelta(minutes=self.viewing_time)
         return Viewed_messages.objects.filter(status_view=False, sms_notification=False, user__profile__notification=True,
                                               id_SMS__time__lte=delta).exclude(id_SMS__ps__name='не зарегистрирован')
 

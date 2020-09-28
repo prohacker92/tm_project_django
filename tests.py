@@ -7,9 +7,6 @@ from threading import Thread
 import os
 import django
 from django.core.exceptions import MultipleObjectsReturned
-
-from tm_project_django.clases.sms_modules.SMS_creator import SMS_creator
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
 from signal_PS import models
@@ -17,7 +14,7 @@ from signal_PS.models import Signal, Signal_status
 from tm_project_django.clases.classes_for_view.classes_for_view import View_tables
 from my_app.models import Sms_message, Ps, Viewed_messages, Profile
 from django.contrib.auth.models import Group, User
-
+from tm_project_django.clases.sms_modules.notifications import Manager_notifications
 
 sms = "КОНТРОЛЛЕР ВКЛЮЧЕН\n ОХРАНА ПИТ. В НОРМЕ (15,0v)\n АКБ 100% Т 42C \nВ_10кВ_Ф.2 ОТКЛЮЧЕН !\n В_10кВ_Ф.3 ОТКЛЮЧЕН !" \
       "\n ДВЕРЬ ЗАКРЫТА ! \nВ_35кВ_Т_1 ВКЛЮЧЕН !\n В_10кВ_Т_1 ОТКЛЮЧЕН !\n ТН_10кВ_N1 ЗЕМЛЯ_В_СЕТИ !" \
@@ -161,14 +158,11 @@ def sms_tester():
     sms_test.save_SMS_fragments_in_db(udn2)
     sms_test.set_SMS('111', text3, udn3)
     sms_test.save_SMS_fragments_in_db(udn3)
-"""
+
 
 #sms_tester()
 
-def from_bd_to_file_group():
-    #all group to file
-    with open('file_groups_bd.txt', 'w') as out:
-        for group in Group.objects.all():
-            out.write('{}\n'.format(group.name))
-
-from_bd_to_file_group()
+var = Manager_notifications(viewing_time=1)
+print(var.search_for_unseen_sms())
+v = Viewed_messages.objects.get(id_SMS=543, status_view=False)
+print(v.status_view)"""

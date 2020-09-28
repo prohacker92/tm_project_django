@@ -99,7 +99,7 @@ def tablview_for_allusers():
         tab_viw.create_view_tables(status_view=True, datetime=datetime.combine(sms.date, sms.time))
         print(sms.id)
 
-tablview_for_allusers()
+#tablview_for_allusers()
 #edit_in_models()
 #from_bd_to_file_ps()
 #from_file_to_db_ps()
