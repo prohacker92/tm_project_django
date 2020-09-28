@@ -1,5 +1,5 @@
 from time import sleep
-#import logging
+# import logging
 from datetime import datetime, timedelta
 from django.utils import timezone
 from time import sleep
@@ -7,6 +7,7 @@ from threading import Thread
 import os
 import django
 from django.core.exceptions import MultipleObjectsReturned
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
 from signal_PS import models
@@ -16,15 +17,16 @@ from my_app.models import Sms_message, Ps, Viewed_messages, Profile
 from django.contrib.auth.models import Group, User
 from tm_project_django.clases.sms_modules.notifications import Manager_notifications
 
-sms = "КОНТРОЛЛЕР ВКЛЮЧЕН\n ОХРАНА ПИТ. В НОРМЕ (15,0v)\n АКБ 100% Т 42C \nВ_10кВ_Ф.2 ОТКЛЮЧЕН !\n В_10кВ_Ф.3 ОТКЛЮЧЕН !" \
-      "\n ДВЕРЬ ЗАКРЫТА ! \nВ_35кВ_Т_1 ВКЛЮЧЕН !\n В_10кВ_Т_1 ОТКЛЮЧЕН !\n ТН_10кВ_N1 ЗЕМЛЯ_В_СЕТИ !" \
-      "\n В_10кВ_Ф.1 ОТКЛЮЧЕН !\n Питание_БПЗ_Т_1 ОТКЛЮЧЕНО !\n АВАРИЙНЫЙ_СИГНАЛ ВКЛЮЧЕН !\n ПРЕДУПРЕД_СИГН ВКЛЮЧЕН !" \
-      "\n ПИТАНИЕ ВОССТАНОВЛЕНО"
+smsps = "08:46\r\nАВАРИЙНЫЙ_СИГНАЛ ОТКЛЮЧЕН\r\nПРЕДУПРЕД_СИГН ОТКЛЮЧЕН\r\nДВЕРЬ ЗАКРЫТА\r\nВ_6кВ_Т_1 ВКЛЮЧЕН\r\n" \
+        "В_6кВ_Т_2 ВКЛЮЧЕН\r\nСВ_6кВ ОТКЛЮЧЕНО\r\nВ_6кВ_Ф.602 ВКЛЮЧЕН\r\nВ_6кВ_Ф.604 ВКЛЮЧЕН\r\nВ_6кВ_Ф.605 ВКЛЮЧЕН\r\n" \
+        "В_6кВ_Ф.606 ВКЛЮЧЕН\r\nВ_6кВ_Ф.608 ВКЛЮЧЕН\r\nТН_6кВ_1С.Ш. НОРМА\r\nТН_6кВ_2С.Ш. НОРМА\r\nОпер._ток_Т_1 В_НОРМЕ\r\n" \
+        "Опер._ток_Т_2 В_НОРМЕ\r\nV6_F602 OFF\r\nV6_F605 OFF"
+
 
 class SignalManager:
 
     def __init__(self, name_ps, text_sms):
-        self.sms_signals = text_sms.split('\n')
+        self.sms_signals = text_sms.split('\r\n')
         self.ps_signals = Signal.objects.filter(ps__name=name_ps)
         self.all_statuses = Signal_status.objects.all()
         self.type = None
@@ -40,108 +42,125 @@ class SignalManager:
         self.status = None
 
     def find_type(self, signal):
-        if signal.startswith("ДВЕРЬ"): #переделать, взять из базы список
+        set_types = set()
+        for ps_signal in self.ps_signals:
+            set_types.add(ps_signal.type.type)
+        #print(set_types)
+        for signal_type in set_types:
+            if signal.startswith(signal_type):  # переделать, взять из базы список
+                self.type = signal_type
+                #print("найден тип ", self.type, end=' ')
 
-            self.type, signal = signal.split(" ", 1)
-            print("найдена ", self.type)
-            return signal
-        try:
-            self.type, signal = signal.split("_", 1)
-        except:
-            print(f'не распознан тип {signal}')
-            return None
-        try:
-            self.ps_signals.get(type__type=self.type)
-            return signal
-        except Signal.DoesNotExist:
-            print(f' не распознан тип {self.type}')
-            return None
-        except MultipleObjectsReturned:
-            return signal
+
 
     def find_voltage(self, signal):
-        if signal.startswith("10кВ") or signal.startswith("35кВ") or signal.startswith("110кВ"): #взять из базы список напряжений
-            self.voltage, signal = signal.split("_", 1)
-            return True, signal
-        else:
-            return False, signal
+        set_values = set()
+        for ps_signal in self.ps_signals:
+            try:
+                set_values.add(ps_signal.voltage.value)
+            except AttributeError:
+                continue
+        for value in set_values:
+            if value in signal:
+                self.voltage = value
+                #print("напряжение ", value, end=' ')
+
 
     def find_name(self, signal):
-        self.name, signal = signal.split(" ")
-        return signal
+        set_names = set()
+        for ps_signal in self.ps_signals:
+            if ps_signal.name:
+                try:
+                    set_names.add(ps_signal.name)
+                except AttributeError:
+                    continue
+        for name in set_names:
+            if name in signal:
+                self.name = name
+                #print("наименование ", name, end=' ')
+
 
     def find_status(self, signal):
-        self.status = signal
-        return signal
+        for status in self.all_statuses:
+            if status.status in signal:
+                self.status = status.status
+                #print('статус ', status.status)
 
-    def print_signal(self):
 
-        if self.type:
-            if self.voltage and self.name:
-                print(f"тип {self.type} напряжение {self.voltage} наименование {self.name} статус {self.status}")
-            else:
-                print(f'тип {self.type} статус {self.status}')
-        else:
-            print("Ошибка!!!")
+    def change_status(self, signal):
+        #Обновление статуса
+        def save_status_in_bd(obj_db):
+            try:
+                obj_db.status = self.all_statuses.get(status=self.status)
+                obj_db.date_up = timezone.now()
+                obj_db.save(update_fields=["status", "date_up"])
+                print("Обновлен сигнал -", end=' ')
+            except Signal_status.DoesNotExist:
+                print(f"не найден статус {self.status}")
 
-    def change_status(self):
-
-        if self.type:
-            if self.voltage and self.name:
+        if self.type and self.voltage and self.name:
                 try:
-                    signal_in_db = self.ps_signals.get(type__type=self.type, voltage__value=self.voltage, name=self.name)
-                    signal_in_db.status = self.all_statuses.get(status=self.status)
-                    signal_in_db.date_up = timezone.now()
-                    signal_in_db.save(update_fields=["status", "date_up"])
-                    print("Статус обновлен")
+                    signal_in_db = self.ps_signals.get(type__type=self.type, voltage__value=self.voltage,
+                                                       name=self.name)
+                    save_status_in_bd(signal_in_db)
+                    print(f"тип {self.type} напряжение {self.voltage} наименование {self.name} статус {self.status}")
+                    return
                 except Signal.DoesNotExist:
                     print(f"не удалось сохранить сигнал типа {self.type} напряжение {self.voltage}"
                           f" наименование {self.name} статус {self.status}")
-                except Signal_status.DoesNotExist:
-                    print(f"не найден статус {self.status}")
-            else:
+                    return
+
+        elif self.type and self.voltage:
                 try:
-                    signal_in_db = self.ps_signals.get(type__type=self.type)
-                    signal_in_db.status = self.all_statuses.get(status=self.status)
-                    signal_in_db.date_up = timezone.now()
-                    signal_in_db.save(update_fields=["status", "date_up"])
-                    print("Статус обновлен")
+                    signal_in_db = self.ps_signals.get(type__type=self.type, voltage__value=self.voltage)
+                    save_status_in_bd(signal_in_db)
+                    print(f"тип {self.type} напряжение {self.voltage}  статус {self.status}")
+                    return
                 except Signal.DoesNotExist:
-                    print(f'не удалось сохранить сигнал типа {self.type} статус {self.status}')
-                except Signal_status.DoesNotExist:
-                    print(f"не найден статус {self.status}")
+                    print(f'не удалось сохранить сигнал типа {self.type} напряжение {self.voltage} статус {self.status}')
+                    return
+
+        elif self.type and self.name:
+            try:
+                signal_in_db = self.ps_signals.get(type__type=self.type, name=self.name)
+                save_status_in_bd(signal_in_db)
+                print(f"тип {self.type}  наименование {self.name} статус {self.status}")
+                return
+            except Signal.DoesNotExist:
+                print(f'не удалось сохранить сигнал типа {self.type} наименование {self.name} статус {self.status}')
+                return
+        elif self.type:
+            try:
+                signal_in_db = self.ps_signals.get(type__type=self.type)
+                save_status_in_bd(signal_in_db)
+                print(f"тип {self.type} статус {self.status}")
+                return
+            except Signal.DoesNotExist:
+                print(f'не удалось сохранить сигнал типа {self.type} наименование {self.name} статус {self.status}')
+                return
+
         else:
-            print("Ошибка!!!")
+            print(f"сигнал {signal} не сохранен")
 
     def run(self):
 
         print(self.sms_signals)
         for signal in self.sms_signals:
-            #try:
+            try:
                 signal = signal.strip().strip(" !")
-                signal = self.find_type(signal)
-                if signal:
-                    is_voltage, signal = self.find_voltage(signal)
-                    if is_voltage:
-                        signal = self.find_name(signal)
-                        signal = self.find_status(signal)
-                        self.print_signal()
-                        self.change_status()
-                        #print("остаток ", signal)
-                        self.to_clear_values()
-                    else:
-                        signal = self.find_status(signal)
-                        self.print_signal()
-                        self.change_status()
-                        #print("остаток ", signal)
-                        self.to_clear_values()
-                else:
-                    continue
-            #except ValueError:
-            #    print(f"ошибка в парсинге {signal}")
-             #   continue
+                self.find_type(signal)
+                self.find_voltage(signal)
+                self.find_name(signal)
+                self.find_status(signal)
+                self.change_status(signal)
+                self.to_clear_values()
+            except BaseException as err:
+                self.to_clear_values()
+                print(err)
+                continue
 
-#_______________________________________________________________________________________________________________
+
+# _______________________________________________________________________________________________________________
 """
 def sms_tester():
     text1 = "test1"
@@ -159,10 +178,7 @@ def sms_tester():
     sms_test.set_SMS('111', text3, udn3)
     sms_test.save_SMS_fragments_in_db(udn3)
 
-
 #sms_tester()
-
-var = Manager_notifications(viewing_time=1)
-print(var.search_for_unseen_sms())
-v = Viewed_messages.objects.get(id_SMS=543, status_view=False)
-print(v.status_view)"""
+"""
+pars = SignalManager("ПС 110кВ Мост", smsps)
+pars.run()
