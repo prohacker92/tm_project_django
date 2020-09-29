@@ -31,7 +31,7 @@ class Read_SMS():
                 handleSms(sms)
         except exceptions.TimeoutException as err:
             print("modem slow", err)
-            sleep(2)
+            sleep(5)
             return
 
     def send_sms(self, number='+79179812832', message="TEST"):

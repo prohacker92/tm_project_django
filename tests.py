@@ -17,10 +17,9 @@ from my_app.models import Sms_message, Ps, Viewed_messages, Profile
 from django.contrib.auth.models import Group, User
 from tm_project_django.clases.sms_modules.notifications import Manager_notifications
 
-smsps = "08:46\r\nАВАРИЙНЫЙ_СИГНАЛ ОТКЛЮЧЕН\r\nПРЕДУПРЕД_СИГН ОТКЛЮЧЕН\r\nДВЕРЬ ЗАКРЫТА\r\nВ_6кВ_Т_1 ВКЛЮЧЕН\r\n" \
-        "В_6кВ_Т_2 ВКЛЮЧЕН\r\nСВ_6кВ ОТКЛЮЧЕНО\r\nВ_6кВ_Ф.602 ВКЛЮЧЕН\r\nВ_6кВ_Ф.604 ВКЛЮЧЕН\r\nВ_6кВ_Ф.605 ВКЛЮЧЕН\r\n" \
-        "В_6кВ_Ф.606 ВКЛЮЧЕН\r\nВ_6кВ_Ф.608 ВКЛЮЧЕН\r\nТН_6кВ_1С.Ш. НОРМА\r\nТН_6кВ_2С.Ш. НОРМА\r\nОпер._ток_Т_1 В_НОРМЕ\r\n" \
-        "Опер._ток_Т_2 В_НОРМЕ\r\nV6_F602 OFF\r\nV6_F605 OFF"
+smsps = "10:11\r\nАварийный_сигнал ОТКЛЮЧЕН\r\nПредупред_сигнал ОТКЛЮЧЕН\r\nДверь ЗАКРЫТА\r\nКЗ_35кВ_Т_1 ВКЛЮЧЕН\r\n" \
+        "В_10кВ_Т_1 ОТКЛЮЧЕН\r\nПитание_БПЗ ОТКЛЮЧЕНО\r\nТН_10кВ НОРМА\r\nВ_10кВ_Ф.2 ОТКЛЮЧЕН\r\n" \
+        "В_10кВ_Ф.3 ОТКЛЮЧЕН\r\nВ_10кВ_Ф.3 ВКЛЮЧЕН\r\nВ_10кВ_Ф.4 ВКЛЮЧЕН"
 
 
 class SignalManager:
@@ -112,6 +111,7 @@ class SignalManager:
 
         elif self.type and self.voltage:
                 try:
+                    #print('tut')
                     signal_in_db = self.ps_signals.get(type__type=self.type, voltage__value=self.voltage)
                     save_status_in_bd(signal_in_db)
                     print(f"тип {self.type} напряжение {self.voltage}  статус {self.status}")
@@ -180,5 +180,6 @@ def sms_tester():
 
 #sms_tester()
 """
-#pars = SignalManager("ПС 110кВ Мост", smsps)
+#pars = SignalManager("ПС 35кВ Шаховская", smsps)
 #pars.run()
+
