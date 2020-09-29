@@ -59,7 +59,6 @@ sms_request = SmsRequest()
 try:
     while thrd.is_alive():
         number_for_send = sms_request.get_send_status()
-        #print(number_for_send)
         try:
             worker.read_sms()
         except UnicodeEncodeError as err:
@@ -71,11 +70,12 @@ try:
                 numbers, text = create_sms_to_send(t)
                 for number in numbers:
                     worker.send_sms(number=number, message=text)
+                    print(f"sms rev {worker.modem._smsRef-1}")
             str_sms.clear()
         if number_for_send:
             message = "/00000 INS OUTS"
             worker.send_sms(number=number_for_send, message=message)
-            print(f"отправлен запрос {message} на номер {number_for_send}")
+            print(f"sms rev {worker.modem._smsRef-1} - {message} на номер {number_for_send} ")
             sms_request.clear_file()
         sleep(1)
 

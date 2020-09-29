@@ -26,9 +26,6 @@ def save_SMS_in_db(number,text):
     sms_message_db.text_sms = text
     sms_message_db.ps = filter_ps(number)
     sms_message_db.save()
-    list = (number, text)
-
-    print(list)
     # сюда функцию и в нее ID SMS
     view_tables = View_tables(number, sms_message_db.id)
     view_tables.create_view_tables()

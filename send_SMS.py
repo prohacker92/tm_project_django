@@ -6,7 +6,8 @@ PORT = '/dev/ttyUSB0'
 SPEED = 115200
 PIN = None
 
-from gsmmodem.modem import GsmModem
+from gsmmodem.modem import GsmModem, StatusReport
+
 
 def main():
     print('Initializing modem...')
@@ -20,11 +21,14 @@ def main():
         number_request = '+79179812832'
         #number_request = '+79272294597'
         message = "Привет"
-        status = modem.sendSms(number_request, message, waitForDeliveryReport=False, deliveryTimeout=20, sendFlash=False)
+
+
+        status = modem.sendSms(number_request, message, waitForDeliveryReport=False, deliveryTimeout=30, sendFlash=False)
         print("Сообщение отправленно - " + number_request)
         print("ждем отчет")
         sleep(15)
-        print(status.status)
+        status = StatusReport(gsmModem=modem)
+        print(status.deliveryStatus)
     finally:
         modem.close();
 

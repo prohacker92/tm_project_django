@@ -9,19 +9,23 @@ message = SMS_creator()
 
 def handleSms(sms):
 
-    if sms.udh:
-      message.set_SMS(sms.number, sms.text, sms.udh[0].data)
-      #message.set_SMS(sms)
+    try:
+        if sms.udh:
+            message.set_SMS(sms.number, sms.text, sms.udh[0].data)
 
-      for i in sms.udh:
-        #print("id = ", i.id)
-        #print("dataLength = ", i.dataLength)
-        print("data = ", i.data)
-      message.save_SMS_fragments_in_db(sms.udh[0].data)
-    else:
-        print('===== Принято короткое СМС =====\nНомер: {0}\nВремя: {1}\nСМС: {2}'.format(sms.number, sms.time, sms.text))
-        save_SMS_in_db(sms.number, sms.text)
-        print('================================')
+        for i in sms.udh:
+            #print("id = ", i.id)
+            #print("dataLength = ", i.dataLength)
+            print("data = ", i.data)
+            message.save_SMS_fragments_in_db(sms.udh[0].data)
+        else:
+            print('============= Принято короткое СМС =============\nНомер: {0}\nВремя: {1}\nСМС: {2}'.format(sms.number, sms.time, sms.text))
+            save_SMS_in_db(sms.number, sms.text)
+            print('='*50)
+
+    except AttributeError:
+        print(f"reference {sms.reference} timeSent {sms.timeSent} timeFinalized {sms.timeFinalized} deliveryStatus {sms.deliveryStatus}")
+        return
 
 class HandleSMS():
 

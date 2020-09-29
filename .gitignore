@@ -4,3 +4,4 @@
 /.idea
 /gunicorn_config.py
 /bin
+/db.sqlite3

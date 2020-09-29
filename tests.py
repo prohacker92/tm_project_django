@@ -44,12 +44,9 @@ class SignalManager:
         set_types = set()
         for ps_signal in self.ps_signals:
             set_types.add(ps_signal.type.type)
-        #print(set_types)
         for signal_type in set_types:
             if signal.startswith(signal_type):  # переделать, взять из базы список
                 self.type = signal_type
-                #print("найден тип ", self.type, end=' ')
-
 
 
     def find_voltage(self, signal):
@@ -62,7 +59,6 @@ class SignalManager:
         for value in set_values:
             if value in signal:
                 self.voltage = value
-                #print("напряжение ", value, end=' ')
 
 
     def find_name(self, signal):
@@ -76,14 +72,11 @@ class SignalManager:
         for name in set_names:
             if name in signal:
                 self.name = name
-                #print("наименование ", name, end=' ')
-
 
     def find_status(self, signal):
         for status in self.all_statuses:
             if status.status in signal:
                 self.status = status.status
-                #print('статус ', status.status)
 
 
     def change_status(self, signal):
@@ -144,7 +137,7 @@ class SignalManager:
 
     def run(self):
 
-        print(self.sms_signals)
+        #print(self.sms_signals)
         for signal in self.sms_signals:
             try:
                 signal = signal.strip().strip(" !")
