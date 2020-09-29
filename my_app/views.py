@@ -17,7 +17,7 @@ def index(request):
     try:
         selected_interval = request.session['choice_status']
     except KeyError:
-        selected_interval = 'False'
+        selected_interval = request.session['choice_status'] = 'False'
     if request.POST:
         selected_interval = request.session['choice_status'] = request.POST['choice']
     user_name = request.user.username
