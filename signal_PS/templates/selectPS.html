@@ -26,33 +26,47 @@ tr:hover {background-color:#F0F8FF;}
 
 .container {
   position: absolute;
-    left: 5%;
-
-    width: 30%;
+    text-align: center;
+    width: 100%;
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 20px;
 }
 
-#para1 {
-    background-color: blue;
-    color: white;
-    padding:5px 30px;
-     margin: 5;
-    text-align: right;
+#para2{
+    width: 100%;
+    padding:2px 20px;
+    margin: 5;
+    text-align: left;
     text-decoration: none;
     display: inline-block;
 }
+article {
+    -webkit-column-count:4;
+    -moz-column-count:4;
+    column-count:4;
+    column-width: 150px;
+    column-gap: 20px;
+    column-rule: 2px dotted #ccc;
+}
 
 </style>
+<div id="content-main">
 <div class="container">
-     <table >
+<!--      <table >
 
-      <tr><th>Подстанции</th><th>действие</th></tr>
+      <tr><th>Подстанции</th></tr>
         {% for  ps in listPS %}
-            <tr><th>{{ ps.name }}  </th><th style="color:MediumSeaGreen;"><a id="para1" href="{{ps.name}}">выбрать</a></th></tr>
+            <tr><th style="color:MediumSeaGreen;"><a id="para2" href="{{ps.name}}">{{ps.name}}</a></th></tr>
         {% endfor %}
 
-    </table>
+    </table>-->
+
+    <article>
+    {% for  ps in listPS %}
+            <p><a id="para2" href="{{ps.name}}">{{ps.name}}</a></p>
+        {% endfor %}
+    </article>
+ </div>
 </div>
 {% endblock logic1 %}
