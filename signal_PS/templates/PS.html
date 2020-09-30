@@ -12,20 +12,15 @@ span {
 
 .column {
     float: left;
-    width: 35%;
+    width: 40%;
     padding: 15px;
 }
-.container {
-  position: absolute;
-    left: 30%;
-
-    width: 50%;
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
+h3 {
+    text-align: left;
 }
 
 table {
+
     border-collapse: collapse;
     width: 100%;
       background-color: #f2f2f2;
@@ -33,10 +28,12 @@ table {
 }
 
 th, td {
-    padding: 8px;
+    font-family: 'Roboto';
+    src: url('../fonts/Roboto-Bold-webfont.woff');
+    padding: 5px 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
-     font-family: 'Roboto';
+    font-size: 15px
 
 }
 
@@ -45,34 +42,25 @@ tr:hover {background-color:#f5f5f5;}
 
 </style>
 
-
-<h1 style="font-family:verdana;">
-    {{ namePS }}
-</h1>
-
 <div class="column">
+
+    <h3 style="font-family:verdana;"> {{name}} </h3>
+
  {% if signals.count > 0 %}
     <table >
-
       <tr><th>Сигнал</th><th>Статус</th><th>Обновлен</th></tr>
         {% for  signal in signals %}
             <tr><th>{{ signal.type.type }} {{ signal.voltage.value }} {{ signal.name }} </th>
                 <th style="color:MediumSeaGreen;">{{ signal.status.status }}</th>
             <th> {{ signal.date_up }} </th></tr>
         {% endfor %}
-
+    <tr><th><a id="para1" href="/ps/{{name}}">Обновить</a></th><th><form  method="POST">
+        <input type="submit" value="СМС ЗАПРОС"></form></th><th style="color:MediumSeaGreen;">{{status}}</th><th><tr>
     </table>
 
     {% else %}
-        <h3 style="font-family:verdana;">
-        нет данных
-        </h3>
+        <h3 style="font-family:verdana;"> нет данных </h3>
  {% endif %}
-     <a id="para1" href="/ps">Обновить</a>
-    <form  method="POST">
-
-        <input type="submit" value="СМС ЗАПРОС">
-    </form>
     </div>
 <!--
 <div class="column">

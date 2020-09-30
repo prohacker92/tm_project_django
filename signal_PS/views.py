@@ -15,15 +15,15 @@ def views_select_ps(request):
 
 
 @login_required
-def views_ps(request,name):
-    signals = Signal.objects.filter(ps=name)
-    controllersGSM = Gsm_controller.objects.filter(ps=name)
+def views_ps(request, name_ps):
+    print(name_ps)
+    signals = Signal.objects.filter(ps=name_ps)  # переделать
     sms_request = SmsRequest()
+    status = ""
     if request.method == "POST":
-        print("post")
-        number_ps = Ps.objects.get(name=name).tel_number
+        number_ps = Ps.objects.get(name=name_ps).tel_number  # переделать
         sms_request.set_send_status(number_ps)
+        status = ">>> отправлено"
 
-
-    data = {"signals": signals, "controllersGSM": controllersGSM}
+    data = {"signals": signals, "name": name_ps, "status": status}
     return render(request, "PS.html", context=data)
