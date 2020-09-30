@@ -5,12 +5,14 @@ from my_app.models import Ps
 
 class Signal_type(models.Model):
     type = models.CharField(max_length=12, primary_key=True)
+    inversion = models.BooleanField()
 
 class Voltage(models.Model):
     value = models.CharField(max_length=10, primary_key=True)
 
 class Signal_status(models.Model):
     status = models.CharField(max_length=30, primary_key=True)
+    boolean_status = models.BooleanField()
 
 class Signal(models.Model):
     type = models.ForeignKey(Signal_type, on_delete=models.CASCADE)
@@ -19,6 +21,7 @@ class Signal(models.Model):
     status = models.ForeignKey(Signal_status, on_delete=models.CASCADE)
     ps = models.ForeignKey(Ps, on_delete=models.CASCADE)
     date_up = models.DateTimeField()
+
 """----------------------------------------------------------------------------------------------------"""
 
 class Controller_type(models.Model):
