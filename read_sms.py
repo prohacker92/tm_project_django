@@ -1,6 +1,5 @@
 from __future__ import print_function
 from time import sleep
-import logging
 from threading import Thread
 
 from gsmmodem import GsmModem, exceptions
@@ -10,10 +9,10 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
 
-from tm_project_django.clases.sms_modules.SMS_creator import create_sms_to_send
-from tm_project_django.clases.sms_modules.notifications import Manager_notifications
-from tm_project_django.clases.sms_modules.handleSMS import handleSms
-from tm_project_django.clases.sms_modules.sms_request import SmsRequest
+from sms_modules.SMS_Gluer import create_sms_to_send
+from sms_modules.notifications import Manager_notifications
+from sms_modules.handleSMS import handleSms
+from sms_modules.sms_request import SmsRequest
 
 
 class Read_SMS():
@@ -49,7 +48,7 @@ def start_manager_notif(worker):
         v.run_manager(worker)
 
 global str_sms
-str_sms =[]
+str_sms = []
 worker = Read_SMS()
 thrd = Thread(target=start_manager_notif, args=(str_sms,))
 thrd.start()

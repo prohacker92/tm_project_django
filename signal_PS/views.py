@@ -2,9 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from my_app.models import Ps
-from signal_PS.models import Signal, Gsm_controller
-from tm_project_django.clases.classes_for_view.classes_for_view import getUserPs
-from tm_project_django.clases.sms_modules.sms_request import SmsRequest
+from signal_PS.models import Signal
+from my_app.service.services_for_view import getUserPs
+from sms_modules.sms_request import SmsRequest
 
 
 @login_required

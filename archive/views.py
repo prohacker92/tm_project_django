@@ -1,12 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django import forms
 
 # Create your views here.
 from archive.form import ArchiveForm, DateForm
 from my_app.models import Ps
-from tm_project_django.clases.classes_for_view.classes_for_view import getUserMessages
-import datetime
+from my_app.service.services_for_view import getUserMessages
+
 
 @login_required
 def show_archive(request):

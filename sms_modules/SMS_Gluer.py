@@ -1,16 +1,8 @@
 from datetime import datetime
-
-import os
-import django
-
-
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
-django.setup()
-
+from signal_PS.service.signal_manager import SignalManager
 from my_app.models import Ps, Sms_message
-from tm_project_django.clases.classes_for_view.classes_for_view import View_tables
-from tests import SignalManager
+from my_app.service.services_for_view import View_tables
+
 
 def filter_ps(number):
     try:
@@ -32,7 +24,7 @@ def save_SMS_in_db(number,text):
     parser = SignalManager(sms_message_db.ps.name, text)
     parser.run()
 
-class SMS_creator():
+class SMS_Gluer():
     # Склейка СМС сообщений
     def __init__(self):
         self.dict = {} # словарь для временного хранения частей СМС

@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseNotFound
 
-from tm_project_django.clases.classes_for_view.classes_for_view import ToolForView
+from my_app.service.services_for_view import ToolForView
 from my_app.form import ChoiceForm
 from .models import Viewed_messages
 from django.contrib.auth.decorators import login_required
@@ -42,7 +42,7 @@ def table(request):
 
 @login_required
 def view_sms(request, id):
-    try:
+    try:#переделать!
         user = User.objects.get(username=request.user.username)
         v_message = Viewed_messages.objects.get(user=user,id=id)
         v_message.status_view = True

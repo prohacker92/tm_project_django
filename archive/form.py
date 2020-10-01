@@ -1,8 +1,7 @@
 from django import forms
 from django.forms import SelectDateWidget
 
-from my_app.models import Ps
-from tm_project_django.clases.classes_for_view.classes_for_view import getUserPs
+from my_app.service.services_for_view import getUserPs
 import datetime
 
 year = datetime.date.today().year

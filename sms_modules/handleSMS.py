@@ -1,11 +1,9 @@
 from __future__ import print_function
-
 import logging
 from gsmmodem.modem import GsmModem
-from tm_project_django.clases.sms_modules.SMS_creator import SMS_creator, save_SMS_in_db
+from sms_modules.SMS_Gluer import save_SMS_in_db, SMS_Gluer
 
-message = SMS_creator()
-
+message = SMS_Gluer()
 
 def handleSms(sms):
     try:
@@ -27,12 +25,13 @@ def handleSms(sms):
 
     except AttributeError:
         print(
-            f"reference {sms.reference} timeSent {sms.timeSent} timeFinalized {sms.timeFinalized} deliveryStatus {sms.deliveryStatus}")
+            f"reference {sms.reference} timeSent {sms.timeSent} timeFinalized {sms.timeFinalized}"
+            f" deliveryStatus {sms.deliveryStatus}")
         return
 
-
+"""
 class HandleSMS():
-
+    
     def __init__(self, PORT='/dev/ttyUSB0', SPEED=115200, PIN=None):
         logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
         self.modem = GsmModem(PORT, SPEED, smsReceivedCallbackFunc=handleSms)
@@ -46,3 +45,4 @@ class HandleSMS():
             self.modem.rxThread.join(9999999)
         finally:
             self.modem.close()
+"""
