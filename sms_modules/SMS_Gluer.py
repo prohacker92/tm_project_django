@@ -1,5 +1,5 @@
 from datetime import datetime
-from signal_PS.service.signal_manager import SignalManager
+from signal_PS.service.services_for_signals import SignalManager
 from my_app.models import Ps, Sms_message
 from my_app.service.services_for_view import View_tables
 

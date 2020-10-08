@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 
 from my_app.models import Sms_message, Viewed_messages, Ps
 
