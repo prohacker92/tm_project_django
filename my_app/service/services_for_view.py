@@ -4,27 +4,40 @@ from django.contrib.auth.models import User
 
 from my_app.models import Sms_message, Viewed_messages, Ps
 
+
+def add_sms_to_wived(username, id_sms):
+    # отметка о просмотре смс пользователем
+    try:
+        user = User.objects.get(username=username)
+        v_message = Viewed_messages.objects.get(user=user, id=id_sms)
+        v_message.status_view = True
+        v_message.datetime_view = datetime.now()
+        v_message.save(update_fields=["status_view", "datetime_view"])
+        return True
+    except v_message.DoesNotExist:
+        return False
+
 def getUserPs(username):
-    #список подстанций данного пользователя
+    # список подстанций данного пользователя
     return Ps.objects.filter(res__user__username=username).select_related('res')
 
 
 def getUserMessages(username):
-    #список сообщений данного пользователя
+    # список сообщений данного пользователя
     return Sms_message.objects.filter(viewed_messages__user__username=username).select_related()
 
 
-class ToolForView:
+def check_view(user_name, selected_interval):
+    # показать просмотренные смс за период
+    if selected_interval != 'False':
+        delta = datetime.now() - timedelta(days=int(selected_interval))
+        return Viewed_messages.objects.filter(user__username=user_name, status_view=True, id_SMS__date__gte=delta)
+    else:
+        return Viewed_messages.objects.filter(user__username=user_name, status_view=False)
 
-    def check_view(self, user_name, selected_interval):
-        #gte
-        if selected_interval != 'False':
-            delta = datetime.now() - timedelta(days=int(selected_interval))
-            return Viewed_messages.objects.filter(user__username=user_name, status_view=True, id_SMS__date__gte=delta)
-        else:
-            return Viewed_messages.objects.filter(user__username=user_name, status_view=False)
 
 def filter_ps(number):
+    # смс не от пс в незарегистрированные
     try:
         return Ps.objects.get(tel_number=number)
     except Ps.DoesNotExist:
@@ -42,6 +55,7 @@ def users_in_res(number, notification=None):
     else:
         return User.objects.filter(groups__name=res)
 
+
 class View_tables():
 
     def __init__(self, tel_number_ps, sms_id):
@@ -58,7 +72,7 @@ class View_tables():
         viw_sms_db.save()
 
     def create_view_tables(self, status_view=False, datetime=None):
-    #создание таблиц просмотров СМС
+        # создание таблиц просмотров СМС
         users = users_in_res(self.number)
         for user in users:
             self.__create_view_table_for_user(user, status_view, datetime)
