@@ -62,7 +62,7 @@ class View_tables():
         self.number = tel_number_ps
         self.sms_id = sms_id
 
-    def __create_view_table_for_user(self, user, status_view, datetime):
+    def _create_view_table_for_user(self, user, status_view, datetime):
         viw_sms_db = Viewed_messages()
         viw_sms_db.user = User.objects.get(id=user.id)
         viw_sms_db.id_SMS = Sms_message.objects.get(id=self.sms_id)
@@ -75,4 +75,4 @@ class View_tables():
         # создание таблиц просмотров СМС
         users = users_in_res(self.number)
         for user in users:
-            self.__create_view_table_for_user(user, status_view, datetime)
+            self._create_view_table_for_user(user, status_view, datetime)

@@ -42,13 +42,13 @@ class SignalManager:
 
     def find_voltage(self, signal):
         # поиск напряжения
-        set_values = set()
+        list_values = []
         for ps_signal in self.ps_signals:
             try:
-                set_values.add(ps_signal.voltage.value)
+                list_values.append(ps_signal.voltage.value)
             except AttributeError:
                 continue
-        for value in set_values:
+        for value in set(list_values):
             if value in signal:
                 self.voltage = value
 
