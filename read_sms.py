@@ -47,7 +47,7 @@ def start_manager_notif(worker):
     while not thrd_stop:
         v.run_manager(worker)
 
-global str_sms
+global str_sms #!!!!
 str_sms = []
 worker = Read_SMS()
 thrd = Thread(target=start_manager_notif, args=(str_sms,))
@@ -57,7 +57,7 @@ sms_request = SmsRequest()
 
 try:
     while thrd.is_alive():
-        number_for_send = sms_request.get_send_status()
+        number_for_send = sms_request.get_sending_status()
         try:
             worker.read_sms()
         except UnicodeEncodeError as err:

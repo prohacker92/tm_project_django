@@ -75,7 +75,7 @@ class SignalManager:
         def save_status_in_bd(obj_db):
             try:
                 obj_db.status = self.all_statuses.get(status=self.status)
-                obj_db.date_up = timezone.now()
+                obj_db.date_up = self.datetime
                 obj_db.save(update_fields=["status", "date_up"])
                 print("Обновлен сигнал -", end=' ')
             except Signal_status.DoesNotExist:
@@ -129,7 +129,7 @@ class SignalManager:
     def run(self):
 
         for signal in self.sms_signals:
-            try:
+            #try:
                 signal = signal.strip().strip(" !")
                 self.find_type(signal)
                 self.find_voltage(signal)
@@ -137,7 +137,7 @@ class SignalManager:
                 self.find_status(signal)
                 self.change_status(signal)
                 self.to_clear_values()
-            except BaseException as err:
-                self.to_clear_values()
-                print(err)
-                continue
+            #except BaseException as err:
+                #self.to_clear_values()
+                #print(err)
+                #continue
