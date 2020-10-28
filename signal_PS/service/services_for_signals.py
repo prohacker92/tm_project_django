@@ -129,7 +129,7 @@ class SignalManager:
     def run(self):
 
         for signal in self.sms_signals:
-            #try:
+            try:
                 signal = signal.strip().strip(" !")
                 self.find_type(signal)
                 self.find_voltage(signal)
@@ -137,7 +137,7 @@ class SignalManager:
                 self.find_status(signal)
                 self.change_status(signal)
                 self.to_clear_values()
-            #except BaseException as err:
-                #self.to_clear_values()
-                #print(err)
-                #continue
+            except BaseException as err:
+                self.to_clear_values()
+                print(err)
+                continue
