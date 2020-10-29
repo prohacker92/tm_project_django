@@ -22,7 +22,7 @@ class Signal(models.Model):
     ps = models.ForeignKey(Ps, on_delete=models.CASCADE)
     date_up = models.DateTimeField()
 
-"""----------------------------------------------------------------------------------------------------"""
+# ----------------------------------------------------------------------------------------------
 
 class Controller_type(models.Model):
     type = models.CharField(max_length=50, primary_key=True)

@@ -26,10 +26,10 @@ class StatusAdmin(admin.ModelAdmin):
 
 #-------------------------------------------------------------
 
-admin.site.register(Controller_type)
-admin.site.register(Provider)
-admin.site.register(SIM_card_number)
+#admin.site.register(Controller_type)
+#admin.site.register(Provider)
+#admin.site.register(SIM_card_number)
 
-@admin.register(Gsm_controller)
-class ControllerGSM_Admin(admin.ModelAdmin):
-    list_display = ("serial_number","type","number_SIM","ps")
+#@admin.register(Gsm_controller)
+#class ControllerGSM_Admin(admin.ModelAdmin):
+ #   list_display = ("serial_number","type","number_SIM","ps")
