@@ -8,6 +8,7 @@ from my_app.models import Ps
 def get_ps_tel_number(name_ps):
     return Ps.objects.get(name=name_ps).tel_number
 
+
 def get_signals_of_ps(name_ps):
     return Signal.objects.filter(ps=name_ps)
 
@@ -33,10 +34,10 @@ class SignalManager:
 
     def find_type(self, signal):
         # поиск типа сигнала
-        set_types = set()
+        list_types = []
         for ps_signal in self.ps_signals:
-            set_types.add(ps_signal.type.type)
-        for signal_type in set_types:
+            list_types.append(ps_signal.type.type)
+        for signal_type in set(list_types):
             if signal.startswith(signal_type):
                 self.type = signal_type
 
@@ -53,15 +54,15 @@ class SignalManager:
                 self.voltage = value
 
     def find_name(self, signal):
-
-        set_names = set()
+        # поиск имени
+        list_names = []
         for ps_signal in self.ps_signals:
             if ps_signal.name:
                 try:
-                    set_names.add(ps_signal.name)
+                    list_names.append(ps_signal.name)
                 except AttributeError:
                     continue
-        for name in set_names:
+        for name in set(list_names):
             if name in signal:
                 self.name = name
 
