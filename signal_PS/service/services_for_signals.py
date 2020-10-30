@@ -37,35 +37,43 @@ class SignalManager:
         list_types = []
         for ps_signal in self.ps_signals:
             list_types.append(ps_signal.type.type)
-        for signal_type in set(list_types):
+        for signal_type in sorted(list(set(list_types)), key=len, reverse=True):
             if signal.startswith(signal_type):
                 self.type = signal_type
+                break
 
     def find_voltage(self, signal):
         # поиск напряжения
         list_values = []
         for ps_signal in self.ps_signals:
-            list_values.append(ps_signal.voltage.value)
-        for value in set(list_values):
+            try:
+                list_values.append(ps_signal.voltage.value)
+            except AttributeError:
+                continue
+        for value in sorted(list(set(list_values)), key=len, reverse=True):
             if value in signal:
                 self.voltage = value
+                break
 
     def find_name(self, signal):
         # поиск имени
         list_names = []
         for ps_signal in self.ps_signals:
             if ps_signal.name:
-                list_names.append(ps_signal.name)
-        set(list_names)
-        list_names.sort(key=len, reverse=True)
-        for name in list_names:
+                try:
+                    list_names.append(ps_signal.name)
+                except AttributeError:
+                    continue
+        for name in sorted(list(set(list_names)), key=len, reverse=True):
             if name in signal:
                 self.name = name
+                break
 
     def find_status(self, signal):
         for status in self.all_statuses:
             if status.status in signal:
                 self.status = status.status
+                break
 
     def change_status(self, signal):
         # Обновление статуса
