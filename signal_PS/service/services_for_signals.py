@@ -45,10 +45,7 @@ class SignalManager:
         # поиск напряжения
         list_values = []
         for ps_signal in self.ps_signals:
-            try:
-                list_values.append(ps_signal.voltage.value)
-            except AttributeError:
-                continue
+            list_values.append(ps_signal.voltage.value)
         for value in set(list_values):
             if value in signal:
                 self.voltage = value
@@ -58,10 +55,7 @@ class SignalManager:
         list_names = []
         for ps_signal in self.ps_signals:
             if ps_signal.name:
-                try:
-                    list_names.append(ps_signal.name)
-                except AttributeError:
-                    continue
+                list_names.append(ps_signal.name)
         for name in set(list_names):
             if name in signal:
                 self.name = name
