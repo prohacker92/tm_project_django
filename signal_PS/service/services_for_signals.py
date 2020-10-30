@@ -56,7 +56,9 @@ class SignalManager:
         for ps_signal in self.ps_signals:
             if ps_signal.name:
                 list_names.append(ps_signal.name)
-        for name in set(list_names):
+        set(list_names)
+        list_names.sort(key=len, reverse=True)
+        for name in list_names:
             if name in signal:
                 self.name = name
 

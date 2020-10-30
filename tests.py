@@ -32,3 +32,16 @@ def sms_tester():
 #pars = SignalManager("ПС 35кВ Шаховская", smsps)
 #pars.run()
 
+#ps_signals = Signal.objects.filter(ps__name="ТЕСТ ПС1")
+#for signal in ps_signals:
+#    result = signal.type.type
+#    if signal.voltage:
+#        result += " " + signal.voltage.value
+#    if signal.name:
+#        result += " " + signal.name
+#    print(result)
+
+l = ["1", "q1","2", "sadsa", 'sas', "a","22","aslfsdkjfdskfhkdsh", 'safdsasd']
+set(l)
+l.sort(key=len, reverse=True)
+print(l)
