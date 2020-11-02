@@ -55,20 +55,16 @@ article {
 </style>
 <div id="content-main">
 <div class="container">
-<!--      <table >
-
-      <tr><th>Подстанции</th></tr>
-        {% for  ps in listPS %}
-            <tr><th style="color:MediumSeaGreen;"><a id="para2" href="{{ps.name}}">{{ps.name}}</a></th></tr>
-        {% endfor %}
-
-    </table>-->
 
     <article>
     {% for  ps in listPS %}
             <p>
                 <a id="para2" href="{{ps.name}}">
+                    {% if ps.is_active %}
+                    <i class="fa fa-circle" style="font-size:15px;color:green;" aria-hidden="true"></i>
+                    {% else %}
                     <i class="fa fa-circle" style="font-size:15px;color:red;" aria-hidden="true"></i>
+                    {% endif %}
                     {{ps.name}}
                 </a>
             </p>
