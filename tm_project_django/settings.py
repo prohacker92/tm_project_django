@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'archive',
     'signal_PS',
     'support_contacts',
+    "django_static_fontawesome",
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

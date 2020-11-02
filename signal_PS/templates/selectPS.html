@@ -3,8 +3,10 @@
 {% block li2 %}<a class="active" href="/ps">Подстанции</a>{% endblock li2 %}
 
 
-
+{% load staticfiles %}
 {% block logic1 %}
+<link rel="stylesheet" type="text/css" href="{% static "fontawesome/css/all.min.css" %}" />
+ <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
 
 <style>
     table {
@@ -64,7 +66,12 @@ article {
 
     <article>
     {% for  ps in listPS %}
-            <p><a id="para2" href="{{ps.name}}">{{ps.name}}</a></p>
+            <p>
+                <a id="para2" href="{{ps.name}}">
+                    <i class="fa fa-circle" style="font-size:15px;color:red;" aria-hidden="true"></i>
+                    {{ps.name}}
+                </a>
+            </p>
         {% endfor %}
     </article>
  </div>

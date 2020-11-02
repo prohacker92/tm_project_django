@@ -9,6 +9,7 @@ class Ps(models.Model):
     name = models.CharField(max_length=100, primary_key=True)
     tel_number = models.CharField(max_length=12)
     res = models.ForeignKey(Group, on_delete=models.CASCADE)
+    is_active = models.BooleanField()
 
 class Sms_message(models.Model):
     number = models.CharField(max_length=12)

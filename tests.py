@@ -43,5 +43,5 @@ def sms_tester():
 
 l = ["1", "q1","2", "sadsa", 'sas', "a","22","aslfsdkjfdskfhkdsh", 'safdsasd']
 set(l)
-l.sort(key=len, reverse=True)
+l.sort(key=len)
 print(l)
