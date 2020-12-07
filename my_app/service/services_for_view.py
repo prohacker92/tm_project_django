@@ -8,8 +8,8 @@ from my_app.models import Sms_message, Viewed_messages, Ps
 def add_sms_to_wived(username, id_sms):
     # отметка о просмотре смс пользователем
     try:
-        user = User.objects.get(username=username)
-        v_message = Viewed_messages.objects.get(user=user, id=id_sms)
+        #user = User.objects.get(username=username)
+        v_message = Viewed_messages.objects.get(user__username=username, id=id_sms)
         v_message.status_view = True
         v_message.datetime_view = datetime.now()
         v_message.save(update_fields=["status_view", "datetime_view"])
@@ -17,13 +17,16 @@ def add_sms_to_wived(username, id_sms):
     except v_message.DoesNotExist:
         return False
 
-def getUserPs(username):
+
+def get_user_ps(username):
     # список подстанций данного пользователя
+    # добавить обратную связь в модели
     return Ps.objects.filter(res__user__username=username).select_related('res')
 
 
-def getUserMessages(username):
+def get_user_messages(username):
     # список сообщений данного пользователя
+    # добавить обратную связь в модели
     return Sms_message.objects.filter(viewed_messages__user__username=username).select_related()
 
 
@@ -46,33 +49,29 @@ def filter_ps(number):
 
 def users_in_res(number, notification=None):
     ps = filter_ps(number)
-    res = ps.res.name
-    if notification is None:
-        return User.objects.filter(groups__name=res)
-    elif notification is True:
-        users = User.objects.filter(groups__name=res).select_related('profile')
+    res_name = ps.res.name
+    if notification:
+        users = User.objects.filter(groups__name=res_name).select_related('profile')
         return users.filter(profile__notification=notification)
     else:
-        return User.objects.filter(groups__name=res)
+        return User.objects.filter(groups__name=res_name)
 
 
-class View_tables():
-
+class ViewTables:
+    # перенести сюда метод для отметки о просмотре
     def __init__(self, tel_number_ps, sms_id):
         self.number = tel_number_ps
         self.sms_id = sms_id
 
-    def _create_view_table_for_user(self, user, status_view, datetime):
-        viw_sms_db = Viewed_messages()
-        viw_sms_db.user = User.objects.get(id=user.id)
-        viw_sms_db.id_SMS = Sms_message.objects.get(id=self.sms_id)
-        viw_sms_db.status_view = status_view
-        viw_sms_db.datetime_view = datetime
-        viw_sms_db.sms_notification = False
+    def _create_view_table_for_user(self, user, status_view):
+        viw_sms_db = Viewed_messages(user=User.objects.get(id=user.id),
+                                     id_SMS=Sms_message.objects.get(id=self.sms_id),
+                                     status_view=status_view,
+                                     sms_notification=False)
         viw_sms_db.save()
 
-    def create_view_tables(self, status_view=False, datetime=None):
+    def create_view_tables(self, status_view=False):
         # создание таблиц просмотров СМС
         users = users_in_res(self.number)
         for user in users:
-            self._create_view_table_for_user(user, status_view, datetime)
+            self._create_view_table_for_user(user, status_view)

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import SelectDateWidget
 
-from my_app.service.services_for_view import getUserPs
+from my_app.service.services_for_view import get_user_ps
 import datetime
 
 year = datetime.date.today().year
@@ -20,7 +20,7 @@ class ArchiveForm(forms.Form):
         super(ArchiveForm, self).__init__(*args)
 
         self.fields['select_list'] = forms.MultipleChoiceField(label='ПС',
-            choices=[(ps.name, ps.name) for ps in getUserPs(self.user_name)], required=False)
+                                                               choices=[(ps.name, ps.name) for ps in get_user_ps(self.user_name)], required=False)
 
     select_list = forms.MultipleChoiceField()
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 from signal_PS.service.services_for_signals import SignalManager
 from my_app.models import Ps, Sms_message
-from my_app.service.services_for_view import View_tables
+from my_app.service.services_for_view import ViewTables
 
 
 def filter_ps(number):
@@ -19,7 +19,7 @@ def save_SMS_in_db(number,text):
     sms_message_db.ps = filter_ps(number)
     sms_message_db.save()
     # сюда функцию и в нее ID SMS
-    view_tables = View_tables(number, sms_message_db.id)
+    view_tables = ViewTables(number, sms_message_db.id)
     view_tables.create_view_tables()
     parser = SignalManager(sms_message_db.ps.name, text)
     parser.run()

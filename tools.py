@@ -8,7 +8,7 @@ django.setup()
 
 from my_app.models import Sms_message, Ps, Viewed_messages
 from django.contrib.auth.models import Group
-from my_app.service.services_for_view import View_tables
+from my_app.service.services_for_view import ViewTables
 
 def edit_in_models():
     # определить статус всех сообщений(просмотренно\нет)
@@ -93,7 +93,7 @@ def from_file_to_database_sms():
 def tablview_for_allusers():
     #создание таблиц просмотра для всех пользователей
     for sms in Sms_message.objects.all():
-        tab_viw = View_tables(sms.number, sms.id)
+        tab_viw = ViewTables(sms.number, sms.id)
         tab_viw.create_view_tables(status_view=True, datetime=datetime.combine(sms.date, sms.time))
         print(sms.id)
 

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from archive.form import ArchiveForm, DateForm
-from my_app.service.services_for_view import getUserMessages
+from my_app.service.services_for_view import get_user_messages
 
 
 @login_required
@@ -13,7 +13,7 @@ def show_archive(request):
     messages = None
     start_date = None
     if request.POST:
-        messages = getUserMessages(user_name)
+        messages = get_user_messages(user_name)
 
         if archive_form.is_valid() and date_form.is_valid():
 
