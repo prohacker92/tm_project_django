@@ -2,9 +2,10 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseNotFound
-from my_app.service.services_for_view import  add_sms_to_wived, check_view
+from my_app.service.services_for_view import add_sms_to_wived, check_view
 from my_app.form import ChoiceForm
 from django.contrib.auth.decorators import login_required
+
 
 @login_required
 def index(request):
@@ -19,8 +20,9 @@ def index(request):
     time_zone = " (МСК)"
     messages = check_view(user_name, selected_interval)
 
-    data = {"messages": messages, "username": user_name, "time_zone": time_zone, 'choiceForm': choice,}
+    data = {"messages": messages, "username": user_name, "time_zone": time_zone, 'choiceForm': choice}
     return render(request, "index.html", context=data)
+
 
 @login_required
 def table(request):

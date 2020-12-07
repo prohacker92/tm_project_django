@@ -2,14 +2,13 @@ from datetime import datetime, timedelta
 
 from django.contrib.auth.models import User
 
-from my_app.models import Sms_message, Viewed_messages, Ps
+from my_app.models import SmsMessage, ViewedMessages, Ps
 
 
 def add_sms_to_wived(username, id_sms):
     # отметка о просмотре смс пользователем
     try:
-        #user = User.objects.get(username=username)
-        v_message = Viewed_messages.objects.get(user__username=username, id=id_sms)
+        v_message = ViewedMessages.objects.get(user__username=username, id=id_sms)
         v_message.status_view = True
         v_message.datetime_view = datetime.now()
         v_message.save(update_fields=["status_view", "datetime_view"])
@@ -27,16 +26,16 @@ def get_user_ps(username):
 def get_user_messages(username):
     # список сообщений данного пользователя
     # добавить обратную связь в модели
-    return Sms_message.objects.filter(viewed_messages__user__username=username).select_related()
+    return SmsMessage.objects.filter(viewed_messages__user__username=username).select_related()
 
 
 def check_view(user_name, selected_interval):
     # показать просмотренные смс за период
     if selected_interval != 'False':
         delta = datetime.now() - timedelta(days=int(selected_interval))
-        return Viewed_messages.objects.filter(user__username=user_name, status_view=True, id_SMS__date__gte=delta)
+        return ViewedMessages.objects.filter(user__username=user_name, status_view=True, id_SMS__date__gte=delta)
     else:
-        return Viewed_messages.objects.filter(user__username=user_name, status_view=False)
+        return ViewedMessages.objects.filter(user__username=user_name, status_view=False)
 
 
 def filter_ps(number):
@@ -64,10 +63,10 @@ class ViewTables:
         self.sms_id = sms_id
 
     def _create_view_table_for_user(self, user, status_view):
-        viw_sms_db = Viewed_messages(user=User.objects.get(id=user.id),
-                                     id_SMS=Sms_message.objects.get(id=self.sms_id),
-                                     status_view=status_view,
-                                     sms_notification=False)
+        viw_sms_db = ViewedMessages(user=User.objects.get(id=user.id),
+                                    id_SMS=SmsMessage.objects.get(id=self.sms_id),
+                                    status_view=status_view,
+                                    sms_notification=False)
         viw_sms_db.save()
 
     def create_view_tables(self, status_view=False):
