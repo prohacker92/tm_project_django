@@ -1,7 +1,5 @@
 from datetime import datetime
-from time import timezone
-
-from signal_PS.models import Signal_status, Signal
+from signal_PS.models import SignalStatus, Signal
 from my_app.models import Ps
 
 
@@ -18,7 +16,7 @@ class SignalManager:
     def __init__(self, name_ps, text_sms):
         self.sms_signals = text_sms.split('\r\n')
         self.ps_signals = Signal.objects.filter(ps__name=name_ps)
-        self.all_statuses = Signal_status.objects.all()
+        self.all_statuses = SignalStatus.objects.all()
         self.type = None
         self.voltage = None
         self.name = None
@@ -83,7 +81,7 @@ class SignalManager:
                 obj_db.date_up = self.datetime
                 obj_db.save(update_fields=["status", "date_up"])
                 print("Обновлен сигнал -", end=' ')
-            except Signal_status.DoesNotExist:
+            except SignalStatus.DoesNotExist:
                 print(f"не найден статус {self.status}")
 
         if self.type and self.voltage and self.name:
