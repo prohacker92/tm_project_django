@@ -1,38 +1,36 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
-# Create your views here.
 from archive.form import ArchiveForm, DateForm
-from my_app.models import Ps
 from my_app.service.services_for_view import getUserMessages
 
 
 @login_required
 def show_archive(request):
+    # переписать в класс!!!
     user_name = request.user.username
-    archiveForm = ArchiveForm(request.POST or None, user_name)
-    dateForm = DateForm(request.POST or None)
+    archive_form = ArchiveForm(request.POST or None, user_name)
+    date_form = DateForm(request.POST or None)
     messages = None
-    startDate = ''
-    endDate = ''
+    start_date = None
     if request.POST:
         messages = getUserMessages(user_name)
 
-        if archiveForm.is_valid() and dateForm.is_valid():
+        if archive_form.is_valid() and date_form.is_valid():
 
-            if archiveForm.cleaned_data.get("select_list"):
-                for t in archiveForm.cleaned_data.get("select_list"):
-                    ps = Ps.objects.get(name=t)
-                    messages = messages.filter(ps=ps)
+            if archive_form.cleaned_data.get("select_list"):
+                list_ps_name = list()
+                for ps_name in archive_form.cleaned_data.get("select_list"):
+                    list_ps_name.append(ps_name)
+                messages = messages.filter(ps__name__in=list_ps_name)
 
-            if dateForm.cleaned_data.get("start_date"):
-                startDate = dateForm.cleaned_data.get("start_date")
+            if date_form.cleaned_data.get("start_date"):
+                start_date = date_form.cleaned_data.get("start_date")
 
-            if dateForm.cleaned_data.get("end_date"):
-                endDate = dateForm.cleaned_data.get("end_date")
-                messages = messages.filter(date__range=(startDate, endDate))
+            if date_form.cleaned_data.get("end_date"):
+                end_date = date_form.cleaned_data.get("end_date")
+                messages = messages.filter(date__range=(start_date, end_date))
 
-    data = {'archiveForm': archiveForm, 'dateForm': dateForm, 'messages': messages}
+    data = {'archive_form': archive_form, 'date_form': date_form, 'messages': messages}
     return render(request, "archive.html", context=data)
 
 

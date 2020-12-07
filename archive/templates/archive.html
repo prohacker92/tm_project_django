@@ -4,19 +4,6 @@
 {% block li5 %}<a class="active" href="/archive">Архив</a>{% endblock li5 %}
 
 {% block logic1 %}
-<!--
-<div class="form-control">
-<form   method="POST">
-        <table>
-
-                <td>{{ archiveForm.as_table }}</td><td>{{dateForm.as_table}}</td>
-
-
-        </table>
-        <input type="submit" value="Показать">
-    </form>
-</div>
--->
 
 <style>
 span {
@@ -39,22 +26,15 @@ sel {
 </style>
 
 <div class="form-control">
-<form   method="POST">
-
-
-    <div class="column">{{ archiveForm.as_table }}</div>
-
-    <div class="column"><table>{{dateForm.as_table}}</table>
-<input type="submit" value="Показать">
-</div>
-
-
-
+    <form   method="POST">
+        <div class="column">{{ archive_form.as_table }}</div>
+        <div class="column">
+            <table>{{date_form.as_table}}</table>
+            <input type="submit" value="Показать">
+        </div>
     </form>
 </div>
-
 {% endblock logic1 %}
-
 
 {% block logic2 %}
 
