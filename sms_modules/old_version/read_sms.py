@@ -42,6 +42,8 @@ class Read_SMS():
         print("модем отключен")
 
 thrd_stop = False
+
+
 def start_manager_notif(worker):
     v = Manager_notifications(viewing_time=1)
     while not thrd_stop:

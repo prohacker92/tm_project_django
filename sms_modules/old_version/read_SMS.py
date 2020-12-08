@@ -8,7 +8,7 @@ import os
 import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tm_project_django.settings')
 django.setup()
-from my_app.models import Sms_message,Ps
+from my_app.models import SmsMessage,Ps
 
 
 def filter_ps(number):
@@ -26,7 +26,7 @@ class Read_SMS():
         print('Initializing modem...')
 
     def read_sms(self):
-        sms_message_db = Sms_message()
+        sms_message_db = SmsMessage()
         for sms in self.modem.listStoredSms(memory='sm', delete=True):
             print(sms.number, sms.time, sms.text)
             sms_message_db.date = datetime.now().date()

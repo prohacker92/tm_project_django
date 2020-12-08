@@ -5,3 +5,4 @@
 /gunicorn_config.py
 /bin
 /db.sqlite3
+/tools/
