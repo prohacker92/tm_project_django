@@ -1,7 +1,7 @@
 from datetime import datetime
-from signal_PS.service.services_for_signals import SignalManager
-from my_app.models import Ps, Sms_message
+from my_app.models import Ps, SmsMessage
 from my_app.service.services_for_view import ViewTables
+from signal_PS.service.services_for_signals import SignalManager
 
 
 def filter_ps(number):
@@ -10,8 +10,9 @@ def filter_ps(number):
     except Ps.DoesNotExist:
         return Ps.objects.get(tel_number="111")
 
-def save_SMS_in_db(number,text):
-    sms_message_db = Sms_message()
+
+def save_SMS_in_db(number, text):
+    sms_message_db = SmsMessage()
     sms_message_db.date = datetime.now().date()
     sms_message_db.time = datetime.now().time()
     sms_message_db.number = number
@@ -23,6 +24,7 @@ def save_SMS_in_db(number,text):
     view_tables.create_view_tables()
     parser = SignalManager(sms_message_db.ps.name, text)
     parser.run()
+
 
 class SMS_Gluer():
     # Склейка СМС сообщений
@@ -52,6 +54,7 @@ class SMS_Gluer():
             self.dict[udh_data[0]] = sms_list
             self.dict[udh_data[0]][udh_data[-1] - 1] = [udh_data[-2], udh_data[-1], number, text]
 
+
     def save_SMS_fragments_in_db(self, udh_data=[]):
         # сохранение в бд и удаление из словаря если собранны все части
         if '_' not in self.dict[udh_data[0]]:
@@ -68,6 +71,7 @@ class SMS_Gluer():
         else:
             print('=== Принято {1} часть СМС из {0} ===\nНомер: {2}'.format(udh_data[-2], udh_data[-1],
                                                                              self.dict[self.key_SMS][udh_data[-1]-1][-2]))
+
 
 
 

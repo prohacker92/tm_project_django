@@ -11,7 +11,7 @@ django.setup()
 
 from sms_modules.SMS_Gluer import create_sms_to_send
 from sms_modules.notifications import Manager_notifications
-from sms_modules.handleSMS import handleSms
+from sms_modules.sms_handler import sms_handle
 from sms_modules.sms_request import SmsRequest
 
 

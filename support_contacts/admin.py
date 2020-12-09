@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from support_contacts.models import Support_contacts
+from support_contacts.models import SupportСontacts
 
 
-@admin.register(Support_contacts)
+@admin.register(SupportСontacts)
 class ContactsAdmin(admin.ModelAdmin):
     list_display = ("position","name","email","numbers")

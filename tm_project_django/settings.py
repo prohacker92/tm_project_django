@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'archive',
     'signal_PS',
     'support_contacts',
+    'sms_modules',
     "django_static_fontawesome",
 ]
 MIDDLEWARE = [
